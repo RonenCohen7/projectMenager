@@ -1,0 +1,94 @@
+.plan-summary {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.plan-summary .card {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 18px;
+    min-width: 160px;
+}
+
+.plan-summary .card b {
+    font-size: 22px;
+}
+
+.plan-summary .card span {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.plan-summary .card.bad b {
+    color: var(--s-drop);
+}
+
+.plan-summary > :last-child {
+    margin-inline-start: auto;
+    align-self: center;
+}
+
+.section-title.current {
+    color: var(--accent);
+}
+
+.plrow {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: start;
+    padding: 12px 16px;
+    border-top: 1px solid var(--line);
+}
+
+.plrow:first-child {
+    border-top: 0;
+}
+
+.plrow-title {
+    font-weight: 600;
+}
+
+.plrow-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 14px;
+    font-size: 12.5px;
+    color: var(--muted);
+}
+
+.plrow-meta .late {
+    color: var(--s-drop);
+    font-weight: 600;
+}
+
+.plrow-notes {
+    margin: 6px 0 0;
+    font-size: 13px;
+    white-space: pre-wrap;
+}
+
+.plrow.pl-completed .plrow-title {
+    text-decoration: line-through;
+    color: var(--muted);
+}
+
+.plrow.pl-postponed {
+    opacity: .55;
+}
+
+.plrow-actions {
+    white-space: nowrap;
+}
+
+.plan-dialog {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding-top: 8px !important;
+}
+
+.plan-dialog .full {
+    grid-column: 1 / -1;
+}

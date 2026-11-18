@@ -1,0 +1,30 @@
+# ==========================
+# Node modules
+# ==========================
+BackEnd/node_modules/
+FrontEnd/node_modules/
+
+# ==========================
+# Build folders
+# ==========================
+BackEnd/dist/
+FrontEnd/dist/
+
+# ==========================
+# Environment files
+# ==========================
+.env
+BackEnd/.env
+FrontEnd/.env
+
+# ==========================
+# Old tracker data (client info) - delivered separately
+# ==========================
+dataBase/02-seed.sql
+
+# ==========================
+# Logs / OS / IDE
+# ==========================
+*.log
+.DS_Store
+.vscode/

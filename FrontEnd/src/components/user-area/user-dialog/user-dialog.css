@@ -1,0 +1,10 @@
+.user-dialog {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding-top: 8px !important;
+}
+
+.user-dialog .full {
+    grid-column: 1 / -1;
+}

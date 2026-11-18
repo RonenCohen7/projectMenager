@@ -1,0 +1,124 @@
+.sttable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+}
+
+.sttable th {
+    padding: 8px 12px;
+    text-align: start;
+    background: var(--sunken);
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.sttable td {
+    padding: 8px 12px;
+    border-top: 1px solid var(--line);
+    vertical-align: middle;
+}
+
+.sttable.compact td {
+    padding: 6px 4px;
+}
+
+.sttable .strong {
+    font-weight: 600;
+}
+
+.sttable .notes {
+    max-width: 240px;
+    color: var(--muted);
+}
+
+.sttable .acts {
+    white-space: nowrap;
+    text-align: left;
+}
+
+.sttable tr.closed td {
+    opacity: .55;
+}
+
+.hst {
+    border-radius: 6px;
+    padding: 1px 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    background: var(--sunken);
+    color: var(--muted);
+}
+
+.hst-searching, .hst-interviewing { background: var(--s-work-bg); color: var(--s-work); }
+.hst-offer_sent { background: var(--s-wait-bg); color: var(--s-wait); }
+.hst-hired { background: var(--s-done-bg); color: var(--s-done); }
+.hst-closed { background: var(--s-drop-bg); color: var(--s-drop); }
+
+.staff-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.staff-card {
+    padding: 14px 16px;
+    border-top: 4px solid var(--s-done);
+}
+
+.staff-card.full { border-top-color: var(--s-wait); }
+.staff-card.over { border-top-color: var(--s-drop); }
+
+.staff-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.staff-head h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.staff-usage {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+}
+
+.staff-usage b {
+    font-size: 20px;
+}
+
+.staff-usage small {
+    color: var(--muted);
+}
+
+.jpbar {
+    width: 110px;
+    height: 6px;
+    border-radius: 99px;
+    background: var(--sunken);
+    overflow: hidden;
+}
+
+.jpbar i {
+    display: block;
+    height: 100%;
+    background: var(--s-done);
+}
+
+.staff-card.full .jpbar i { background: var(--s-wait); }
+.staff-card.over .jpbar i { background: var(--s-drop); }
+
+.hire-dialog {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding-top: 8px !important;
+}
+
+.hire-dialog .full {
+    grid-column: 1 / -1;
+}

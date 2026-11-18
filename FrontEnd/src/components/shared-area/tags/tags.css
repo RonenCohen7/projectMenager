@@ -1,0 +1,87 @@
+/* =========================
+   Pills / chips
+========================= */
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    padding: 2px 10px;
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--c);
+    background: var(--cb);
+}
+
+.pill::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.s-new { --c: var(--s-new); --cb: var(--s-new-bg); }
+.s-work { --c: var(--s-work); --cb: var(--s-work-bg); }
+.s-fix { --c: var(--s-fix); --cb: var(--s-fix-bg); }
+.s-wait { --c: var(--s-wait); --cb: var(--s-wait-bg); }
+.s-frozen { --c: var(--s-frozen); --cb: var(--s-frozen-bg); }
+.s-done { --c: var(--s-done); --cb: var(--s-done-bg); }
+.s-drop { --c: var(--s-drop); --cb: var(--s-drop-bg); }
+
+/* Client chip - color by client (--hue) */
+.cchip {
+    display: inline-block;
+    border-radius: 6px;
+    padding: 1px 8px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: hsl(var(--hue) 62% 30%);
+    background: hsl(var(--hue) 62% 93%);
+    white-space: nowrap;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Urgency / priority tags */
+.tag {
+    display: inline-block;
+    border-radius: 6px;
+    padding: 1px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.tag-urgent { background: var(--s-drop-bg); color: var(--s-drop); }
+.tag-high { background: var(--s-wait-bg); color: var(--s-wait); }
+.tag-normal { background: var(--sunken); color: var(--muted); }
+.tag-low { background: var(--s-done-bg); color: var(--s-done); }
+.tag-frozen { background: var(--s-frozen-bg); color: var(--s-frozen); }
+.tag-stale { background: #FBE4DA; color: var(--stale); }
+
+/* Stage progress */
+.sprog {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--muted);
+}
+
+.spbar {
+    flex: 0 0 90px;
+    height: 6px;
+    border-radius: 99px;
+    background: var(--sunken);
+    overflow: hidden;
+}
+
+.spbar i {
+    display: block;
+    height: 100%;
+    background: var(--s-done);
+}

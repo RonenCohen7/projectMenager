@@ -1,0 +1,70 @@
+.pstages {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.pstages-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.spbar.big {
+    flex: 1;
+    height: 10px;
+}
+
+.pstages-group-title {
+    padding: 8px 16px;
+    background: var(--sunken);
+    font-weight: 700;
+    font-size: 13.5px;
+}
+
+.pstage {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr) 130px 150px auto;
+    gap: 10px;
+    align-items: center;
+    padding: 8px 12px;
+    border-top: 1px solid var(--line);
+}
+
+.pstage-name {
+    font-weight: 500;
+}
+
+.pstage.st-done .pstage-name {
+    text-decoration: line-through;
+    color: var(--muted);
+}
+
+.pstage.st-doing {
+    background: #F4F8FD;
+}
+
+.pstage.st-review {
+    background: #F8F4FC;
+}
+
+.pstages-add {
+    display: flex;
+    gap: 10px;
+    padding: 12px;
+    align-items: center;
+}
+
+.pstages-add .grow {
+    flex: 1;
+}
+
+.pstages-groupin {
+    width: 170px;
+}
+
+.pstages-templates {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}

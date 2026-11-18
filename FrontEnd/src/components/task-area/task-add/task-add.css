@@ -1,0 +1,22 @@
+.tadd {
+    display: flex;
+    gap: 10px;
+    padding: 12px;
+    align-items: center;
+}
+
+.tadd > * {
+    flex: 0 0 120px;
+}
+
+.tadd .tadd-text {
+    flex: 1 1 auto;
+}
+
+.tadd .tadd-project {
+    flex: 0 0 220px;
+}
+
+.tadd > button {
+    flex: none;
+}

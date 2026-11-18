@@ -1,0 +1,52 @@
+.header {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0 28px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 0;
+    background: none;
+    padding: 6px 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    font: inherit;
+    color: var(--ink);
+}
+
+.header-user:hover {
+    background: var(--sunken);
+}
+
+.header-avatar {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 15px !important;
+    background: var(--accent) !important;
+}
+
+.header-name {
+    font-weight: 600;
+}
+
+.role-chip {
+    font-weight: 600;
+}
+
+.role-admin { background: var(--s-drop-bg) !important; color: var(--s-drop) !important; }
+.role-manager { background: var(--s-work-bg) !important; color: var(--s-work) !important; }
+.role-employee { background: var(--sunken) !important; color: var(--muted) !important; }

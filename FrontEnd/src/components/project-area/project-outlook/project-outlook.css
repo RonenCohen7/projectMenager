@@ -1,0 +1,32 @@
+.poutlook {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.poutlook-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px;
+}
+
+.poutlook-card h3 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.poutlook-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.poutlook-grid .full {
+    grid-column: 1 / -1;
+}
+
+.poutlook-actions {
+    display: flex;
+    gap: 10px;
+}

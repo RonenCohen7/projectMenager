@@ -1,0 +1,22 @@
+.users-table th {
+    font-weight: 700;
+    color: var(--muted);
+    background: var(--sunken);
+}
+
+.users-table .user-name {
+    font-weight: 600;
+}
+
+.users-table .user-email {
+    text-align: right;
+    color: var(--muted);
+}
+
+.users-table tr.inactive td {
+    opacity: .5;
+}
+
+.users-table .user-actions {
+    white-space: nowrap;
+}

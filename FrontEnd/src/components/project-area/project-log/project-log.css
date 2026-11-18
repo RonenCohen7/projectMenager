@@ -1,0 +1,111 @@
+.plog {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.plog-new {
+    align-self: flex-start;
+}
+
+/* =========================
+   Timeline
+========================= */
+
+.timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0 18px 0 0;
+    border-right: 2px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.entry {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 16px;
+}
+
+.entry::before {
+    content: "";
+    position: absolute;
+    right: -26px;
+    top: 16px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+}
+
+.entry.type-task_completed::before { background: var(--s-done); }
+.entry.type-invoice::before { background: var(--s-wait); }
+.entry.type-internal_meeting::before { background: var(--s-fix); }
+
+.entry-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.entry-head .grow {
+    flex: 1;
+}
+
+.entry-type {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.entry-act {
+    font-size: 12.5px;
+    color: var(--muted);
+}
+
+.entry-text {
+    margin: 8px 0 0;
+    white-space: pre-wrap;
+    line-height: 1.6;
+}
+
+.entry-tasks {
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: var(--sunken);
+}
+
+.entry-meta {
+    margin-top: 6px;
+    font-size: 12.5px;
+    color: var(--muted);
+}
+
+/* =========================
+   Form
+========================= */
+
+.entry-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    padding: 16px;
+}
+
+.entry-form .full {
+    grid-column: 1 / -1;
+}
+
+.entry-form-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.entry-form-bar .note {
+    flex: 1;
+}

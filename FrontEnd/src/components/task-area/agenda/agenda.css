@@ -1,0 +1,7 @@
+.agenda-copy {
+    white-space: nowrap;
+}
+
+.agenda-done {
+    color: var(--muted);
+}

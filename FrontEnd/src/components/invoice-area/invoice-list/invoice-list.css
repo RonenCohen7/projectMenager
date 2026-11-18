@@ -1,0 +1,50 @@
+.invrow {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--line);
+}
+
+.invrow:first-child {
+    border-top: 0;
+}
+
+.invrow-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.invrow-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.invrow-name {
+    font-weight: 700;
+}
+
+.invrow-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.invwhat {
+    color: var(--ink);
+    font-weight: 600;
+}
+
+.invrow-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+.inv-ready .list { border-right: 4px solid var(--s-done); }
+.inv-sent .list { border-right: 4px solid var(--s-wait); }
+.inv-check .list { border-right: 4px solid var(--s-fix); }
+.inv-paid .list { opacity: .75; }

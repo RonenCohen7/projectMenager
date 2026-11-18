@@ -1,0 +1,137 @@
+/* =========================
+   Status strip
+========================= */
+
+.strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: 999px;
+    padding: 5px 14px;
+    font: inherit;
+    font-size: 13.5px;
+    color: var(--ink);
+    cursor: pointer;
+}
+
+.chip b {
+    font-variant-numeric: tabular-nums;
+}
+
+.chip .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--c, var(--stale));
+}
+
+.chip[aria-pressed="true"] {
+    border-color: var(--ink);
+    box-shadow: inset 0 0 0 1px var(--ink);
+}
+
+.chip.alert b {
+    color: var(--stale);
+}
+
+
+/* =========================
+   Project rows
+========================= */
+
+.prow {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.6fr) 150px;
+    gap: 6px 24px;
+    padding: 14px 20px;
+    border: 0;
+    border-top: 1px solid var(--line);
+    background: none;
+    font: inherit;
+    color: inherit;
+    text-align: start;
+    cursor: pointer;
+    align-items: start;
+}
+
+.prow:first-child {
+    border-top: 0;
+}
+
+.prow:hover {
+    background: var(--sunken);
+}
+
+.prow-main,
+.prow-next {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.prow-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.prow-name {
+    font-weight: 700;
+    font-size: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.prow-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.prow-label {
+    color: var(--muted);
+    font-size: 12.5px;
+}
+
+.prow-task {
+    font-size: 14px;
+}
+
+.prow-last {
+    color: var(--muted);
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.prow-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+}
+
+.prow-days {
+    font-size: 12.5px;
+    color: var(--muted);
+}
+
+.prow-days.stale {
+    color: var(--stale);
+    font-weight: 600;
+}

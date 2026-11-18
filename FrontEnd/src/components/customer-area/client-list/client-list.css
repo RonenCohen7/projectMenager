@@ -1,0 +1,14 @@
+.clients-table th {
+    font-weight: 700;
+    color: var(--muted);
+    background: var(--sunken);
+}
+
+.clients-table .client-ltr {
+    text-align: right;
+    color: var(--muted);
+}
+
+.clients-table .client-actions {
+    white-space: nowrap;
+}

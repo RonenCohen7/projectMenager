@@ -1,0 +1,163 @@
+/* =========================
+   Colors (from the old tracker)
+========================= */
+
+:root {
+    --bg: #F3F5F7;
+    --surface: #FFFFFF;
+    --sunken: #E9EDF1;
+    --line: #D6DDE4;
+    --ink: #16212C;
+    --muted: #5B6B7A;
+    --accent: #1E5B7A;
+    --accent-soft: #DCEAF2;
+
+    --s-new: #6B7785;     --s-new-bg: #E8ECF0;
+    --s-work: #1C5FA8;    --s-work-bg: #DDEAF8;
+    --s-fix: #7A4BB0;     --s-fix-bg: #ECE3F7;
+    --s-wait: #9A5B00;    --s-wait-bg: #FBEBCF;
+    --s-frozen: #3F6C80;  --s-frozen-bg: #DCECF2;
+    --s-done: #1D7A4C;    --s-done-bg: #DAF1E4;
+    --s-drop: #9B2C2C;    --s-drop-bg: #F8E0E0;
+    --stale: #B0441C;
+
+    --h0: #EDF0F3; --h1: #BCE3C9; --h2: #F5D88E; --h3: #F3A57F; --h4: #D9534A;
+
+    --display: "Frank Ruhl Libre", "Times New Roman", serif;
+    --body: "IBM Plex Sans Hebrew", "Segoe UI", Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    direction: rtl;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 14px;
+}
+
+
+/* =========================
+   Page
+========================= */
+
+.page {
+    padding: 22px 28px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+}
+
+.page-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.page-head h1 {
+    font-family: var(--display);
+    font-size: 30px;
+    margin: 0;
+    line-height: 1.1;
+}
+
+.page-head p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 13.5px;
+}
+
+.toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.toolbar .grow {
+    flex: 1;
+}
+
+.toolbar > .MuiFormControl-root:not(.grow) {
+    width: 180px;
+    flex: none;
+}
+
+.note {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.empty {
+    padding: 36px 20px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.empty strong {
+    display: block;
+    color: var(--ink);
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+
+.list {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.section-title {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 6px 0 8px;
+    font-size: 16px;
+}
+
+.section-title small {
+    color: var(--muted);
+    font-weight: 500;
+    font-size: 13px;
+}
+
+
+/* Clickable text */
+.link {
+    border: 0;
+    background: none;
+    padding: 0;
+    font: inherit;
+    color: var(--ink);
+    cursor: pointer;
+    text-align: start;
+}
+
+.link:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+/* Toast in RTL */
+.Toastify__toast {
+    font-family: var(--body);
+    direction: rtl;
+}

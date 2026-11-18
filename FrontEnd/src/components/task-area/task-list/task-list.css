@@ -1,0 +1,9 @@
+.tgroup .section-title.late {
+    color: var(--s-drop);
+}
+
+.tlist-done-toggle {
+    margin-bottom: 8px;
+    color: var(--muted);
+    font-weight: 600;
+}

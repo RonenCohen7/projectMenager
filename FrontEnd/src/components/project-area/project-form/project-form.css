@@ -1,0 +1,76 @@
+.pform {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.pform-note {
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 13.5px;
+}
+
+.pform-section {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.pform-section h3 {
+    margin: 0 0 4px;
+    font-size: 15px;
+}
+
+.pform-section .note {
+    margin: 0 0 12px;
+}
+
+.pform-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.pform-grid .full {
+    grid-column: 1 / -1;
+}
+
+.pform-members {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pform-hours {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.pform-calc {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 12px;
+    border-radius: 8px;
+    background: var(--sunken);
+}
+
+.pform-calc span {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.pform-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.pform-actions .grow {
+    flex: 1;
+}

@@ -1,0 +1,108 @@
+.board-page {
+    height: 100%;
+}
+
+.board {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 12px;
+    overflow-x: auto;
+}
+
+.bcol {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    background: var(--sunken);
+    border-radius: 12px;
+    border: 2px dashed transparent;
+}
+
+.bcol.over {
+    border-color: var(--c);
+}
+
+.bcol-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    font-weight: 700;
+    border-bottom: 3px solid var(--c);
+}
+
+.bcol-head .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--c);
+}
+
+.bcol-head b {
+    margin-inline-start: auto;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.bcol-cards {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.kcard {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    cursor: grab;
+}
+
+.kcard:active {
+    cursor: grabbing;
+}
+
+.kcard-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.kcard-title {
+    font-weight: 700;
+    font-size: 14.5px;
+}
+
+.kcard-meta {
+    font-size: 12.5px;
+    color: var(--muted);
+}
+
+.kcard-next {
+    font-size: 12.5px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.kcard .sprog {
+    flex-wrap: wrap;
+    gap: 2px 8px;
+}
+
+.kcard .sprog .spbar {
+    flex-basis: 100%;
+}
+
+.kcard-phase {
+    font-size: 12.5px !important;
+}

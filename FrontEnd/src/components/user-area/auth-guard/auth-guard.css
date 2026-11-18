@@ -1,0 +1,17 @@
+.auth-denied {
+    margin: 80px auto;
+    max-width: 420px;
+    padding: 28px;
+    text-align: center;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    color: var(--muted);
+}
+
+.auth-denied strong {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--ink);
+    font-size: 17px;
+}

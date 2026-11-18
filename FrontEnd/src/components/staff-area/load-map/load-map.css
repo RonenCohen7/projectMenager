@@ -1,0 +1,151 @@
+.heat-settings {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) auto;
+    gap: 12px;
+    padding: 14px;
+    align-items: center;
+}
+
+.heat-settings .full {
+    grid-column: 1 / -1;
+    margin: 0;
+}
+
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend i {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.heat-wrap {
+    overflow-x: auto;
+}
+
+.heat {
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 13.5px;
+}
+
+.heat th,
+.heat td {
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+    text-align: center;
+}
+
+.heat thead th {
+    background: var(--sunken);
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.heat .sticky {
+    position: sticky;
+    right: 0;
+    background: var(--surface);
+    text-align: start;
+    z-index: 1;
+    font-weight: 600;
+}
+
+.heat thead .sticky {
+    background: var(--sunken);
+}
+
+.heat .client-col .cchip {
+    max-width: 110px;
+}
+
+.heat .num {
+    font-variant-numeric: tabular-nums;
+}
+
+.cell,
+.total {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 30px;
+    border: 0;
+    border-radius: 6px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.total {
+    padding: 0 10px;
+    min-width: 120px;
+}
+
+.h0 { background: var(--h0); }
+.h1 { background: var(--h1); }
+.h2 { background: var(--h2); }
+.h3 { background: var(--h3); }
+.h4 { background: var(--h4); color: #FFFFFF; }
+
+.cell.est,
+.legend i.est {
+    background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, .45) 0 4px, transparent 4px 8px);
+}
+
+.jp {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.jp .jpbar {
+    width: 70px;
+    height: 6px;
+    border-radius: 99px;
+    background: var(--sunken);
+    overflow: hidden;
+}
+
+.jp .jpbar i {
+    display: block;
+    height: 100%;
+    background: var(--s-done);
+}
+
+.jp-full .jpbar i { background: var(--s-wait); }
+.jp-over .jpbar i { background: var(--s-drop); }
+.jp-over small { color: var(--s-drop); font-weight: 700; }
+
+.load-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+}
+
+.load-table th {
+    padding: 8px 10px;
+    text-align: start;
+    background: var(--sunken);
+    color: var(--muted);
+}
+
+.load-table td {
+    padding: 8px 10px;
+    border-top: 1px solid var(--line);
+    vertical-align: middle;
+}
