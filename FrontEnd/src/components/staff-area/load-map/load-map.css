@@ -2,7 +2,8 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr) auto;
     gap: 12px;
-    padding: 14px;
+    padding: 18px;
+    border-radius: 18px !important;
     align-items: center;
 }
 
@@ -44,14 +45,14 @@
 
 .heat th,
 .heat td {
-    padding: 6px 8px;
+    padding: 8px 10px;
     border-bottom: 1px solid var(--line);
     white-space: nowrap;
     text-align: center;
 }
 
 .heat thead th {
-    background: var(--sunken);
+    background: #F8FAFC;
     color: var(--muted);
     font-weight: 700;
 }
@@ -66,7 +67,7 @@
 }
 
 .heat thead .sticky {
-    background: var(--sunken);
+    background: #F8FAFC;
 }
 
 .heat .client-col .cchip {
@@ -82,10 +83,10 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 38px;
-    height: 30px;
+    min-width: 40px;
+    height: 32px;
     border: 0;
-    border-radius: 6px;
+    border-radius: 10px;
     font: inherit;
     font-weight: 700;
     cursor: pointer;

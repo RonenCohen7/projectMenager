@@ -20,3 +20,35 @@
 .users-table .user-actions {
     white-space: nowrap;
 }
+
+.users-table .user-projects {
+    max-width: 520px;
+}
+
+.uproj {
+    display: inline-block;
+    margin: 2px 0 2px 6px;
+    padding: 1px 8px;
+    border: 0;
+    border-radius: 6px;
+    font: inherit;
+    font-size: 12.5px;
+    cursor: pointer;
+    background: var(--sunken);
+    color: var(--ink);
+}
+
+.uproj:hover {
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.uproj.role-manager {
+    background: var(--s-work-bg);
+    color: var(--s-work);
+}
+
+.uproj.role-executor {
+    background: var(--s-done-bg);
+    color: var(--s-done);
+}

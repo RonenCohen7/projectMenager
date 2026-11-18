@@ -9,6 +9,7 @@ import type { ProjectDetailsModel } from "../../models/project-model";
 import { statusLabel, UpdateType } from "../../models/enum";
 import { fmtDate, projectTitle, todayISO } from "../../utils/utils";
 import { notificationService } from "../../service/notificationService";
+import { DateField } from "../../shared-area/date-field/date-field";
 
 
 //Update mail to copy into Outlook + meeting invite (.ics)
@@ -100,7 +101,7 @@ export function ProjectOutlook({ project }: { project: ProjectDetailsModel }) {
                 <h3>זימון לפגישה</h3>
                 <div className="poutlook-grid">
                     <TextField label="כותרת" className="full" value={invite.title} onChange={e => setInvite({ ...invite, title: e.target.value })} />
-                    <TextField label="תאריך" type="date" value={invite.date} onChange={e => setInvite({ ...invite, date: e.target.value })} slotProps={{ inputLabel: { shrink: true } }} />
+                    <DateField label="תאריך" value={invite.date} onChange={v => setInvite({ ...invite, date: v ?? "" })} />
                     <TextField label="שעה" type="time" value={invite.time} onChange={e => setInvite({ ...invite, time: e.target.value })} slotProps={{ inputLabel: { shrink: true } }} />
                     <TextField label="משך (דקות)" type="number" value={invite.minutes} onChange={e => setInvite({ ...invite, minutes: Number(e.target.value) || 60 })} />
                     <TextField label="מיקום" value={invite.location} onChange={e => setInvite({ ...invite, location: e.target.value })} />

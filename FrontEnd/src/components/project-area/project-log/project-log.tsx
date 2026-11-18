@@ -12,6 +12,7 @@ import { fmtDate, isPrivileged, todayISO } from "../../utils/utils";
 import { projectService } from "../../service/projectService";
 import { notificationService } from "../../service/notificationService";
 import { StatusPill } from "../../shared-area/tags/tags";
+import { DateField } from "../../shared-area/date-field/date-field";
 
 
 //Meetings and updates log of a project (timeline). Every member can write.
@@ -132,7 +133,7 @@ function EntryForm({ project, update, onDone }: EntryFormProps) {
     return (
         <form className="card entry-form" onSubmit={handleSubmit(send)} autoComplete="off">
 
-            <TextField label="תאריך" type="date" slotProps={{ inputLabel: { shrink: true } }} {...register("updateDate")} />
+            <DateField label="תאריך" value={watch("updateDate")} onChange={v => setValue("updateDate", v ?? "")} />
 
             <TextField select label="סוג" value={watch("updateType")} onChange={e => setValue("updateType", e.target.value as UpdateType)}>
                 {Object.values(UpdateType).map(t => <MenuItem key={t} value={t}>{updateTypeLabel[t]}</MenuItem>)}
@@ -152,7 +153,7 @@ function EntryForm({ project, update, onDone }: EntryFormProps) {
                         {users.filter(u => u.isActive).map(u => <MenuItem key={u.idUser} value={String(u.idUser)}>{u.firstName}</MenuItem>)}
                     </TextField>
 
-                    <TextField label="תאריך יעד למשימה" type="date" slotProps={{ inputLabel: { shrink: true } }} {...register("taskDue")} />
+                    <DateField label="תאריך יעד למשימה" value={watch("taskDue")} onChange={v => setValue("taskDue", v ?? "")} />
 
                     <TextField select label="עדיפות המשימה" value={watch("taskPriority")} onChange={e => setValue("taskPriority", e.target.value as Priority)}>
                         {Object.values(Priority).map(p => <MenuItem key={p} value={p}>{priorityLabel[p]}</MenuItem>)}

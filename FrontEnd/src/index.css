@@ -3,28 +3,34 @@
 ========================= */
 
 :root {
-    --bg: #F3F5F7;
+    --bg: #F4F6FA;
     --surface: #FFFFFF;
-    --sunken: #E9EDF1;
-    --line: #D6DDE4;
-    --ink: #16212C;
+    --sunken: #EEF2F7;
+    --line: #E2E8F0;
+    --ink: #0F1B2A;
     --muted: #5B6B7A;
-    --accent: #1E5B7A;
-    --accent-soft: #DCEAF2;
+    --accent: #4F46E5;
+    --accent-soft: #EEF2FF;
+    --accent-2: #0891B2;
+    --gradient: linear-gradient(90deg, #4F46E5, #0891B2);
 
-    --s-new: #6B7785;     --s-new-bg: #E8ECF0;
-    --s-work: #1C5FA8;    --s-work-bg: #DDEAF8;
-    --s-fix: #7A4BB0;     --s-fix-bg: #ECE3F7;
-    --s-wait: #9A5B00;    --s-wait-bg: #FBEBCF;
+    --s-new: #334155;     --s-new-bg: #E2E8F0;
+    --s-work: #1E40AF;    --s-work-bg: #DBEAFE;
+    --s-fix: #5B21B6;     --s-fix-bg: #EDE9FE;
+    --s-wait: #92400E;    --s-wait-bg: #FEF3C7;
     --s-frozen: #3F6C80;  --s-frozen-bg: #DCECF2;
-    --s-done: #1D7A4C;    --s-done-bg: #DAF1E4;
-    --s-drop: #9B2C2C;    --s-drop-bg: #F8E0E0;
-    --stale: #B0441C;
+    --s-done: #166534;    --s-done-bg: #DCFCE7;
+    --s-drop: #991B1B;    --s-drop-bg: #FEE2E2;
+    --stale: #B45309;
+
+    --ok: #16A34A;    --ok-soft: #DCFCE7;
+    --risk: #D97706;  --risk-soft: #FEF3C7;
+    --off: #DC2626;   --off-soft: #FEE2E2;
 
     --h0: #EDF0F3; --h1: #BCE3C9; --h2: #F5D88E; --h3: #F3A57F; --h4: #D9534A;
 
     --display: "Frank Ruhl Libre", "Times New Roman", serif;
-    --body: "IBM Plex Sans Hebrew", "Segoe UI", Arial, sans-serif;
+    --body: Rubik, "Segoe UI", Arial, sans-serif;
 }
 
 * {
@@ -52,10 +58,10 @@ body {
 ========================= */
 
 .page {
-    padding: 22px 28px 40px;
+    padding: 26px 32px 48px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 18px;
     min-width: 0;
 }
 
@@ -67,16 +73,17 @@ body {
 }
 
 .page-head h1 {
-    font-family: var(--display);
     font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -.5px;
     margin: 0;
     line-height: 1.1;
 }
 
 .page-head p {
-    margin: 4px 0 0;
-    color: var(--muted);
-    font-size: 13.5px;
+    margin: 6px 0 0;
+    color: #475569;
+    font-size: 15px;
 }
 
 .toolbar {
@@ -100,7 +107,7 @@ body {
 }
 
 .empty {
-    padding: 36px 20px;
+    padding: 40px 20px;
     text-align: center;
     color: var(--muted);
 }
@@ -115,28 +122,87 @@ body {
 .card {
     background: var(--surface);
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: 16px;
 }
 
 .list {
     background: var(--surface);
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: 18px;
     overflow: hidden;
 }
 
 .section-title {
     display: flex;
-    align-items: baseline;
-    gap: 8px;
-    margin: 6px 0 8px;
-    font-size: 16px;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0 10px;
+    font-size: 17px;
+    font-weight: 700;
 }
 
 .section-title small {
+    padding: 1px 9px;
+    border-radius: 99px;
+    background: var(--sunken);
     color: var(--muted);
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+/* Shared KPI tile (status meeting, plan) */
+.kpi {
+    --k: var(--accent);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    font: inherit;
+    color: var(--ink);
+    text-align: start;
+    position: relative;
+    overflow: hidden;
+}
+
+.kpi::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 4px;
+    background: var(--k);
+    opacity: .85;
+}
+
+.kpi b {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+.kpi span {
     font-size: 13px;
+    color: var(--muted);
+}
+
+.kpi.warn { --k: var(--risk); }
+.kpi.bad { --k: var(--off); }
+.kpi.good { --k: var(--ok); }
+.kpi.muted { --k: #CBD5E1; }
+
+button.kpi:not(:disabled) {
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+}
+
+button.kpi:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(15, 27, 42, .08);
 }
 
 

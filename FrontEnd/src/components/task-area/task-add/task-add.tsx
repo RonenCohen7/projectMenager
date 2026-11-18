@@ -8,6 +8,7 @@ import { Priority, priorityLabel } from "../../models/enum";
 import { tabOf } from "../../utils/utils";
 import { taskService } from "../../service/taskService";
 import { notificationService } from "../../service/notificationService";
+import { DateField } from "../../shared-area/date-field/date-field";
 
 
 interface TaskAddProps {
@@ -88,7 +89,7 @@ export function TaskAdd({ idProject, idWithUser, placeholder }: TaskAddProps) {
                 {Object.values(Priority).map(p => <MenuItem key={p} value={p}>{priorityLabel[p]}</MenuItem>)}
             </TextField>
 
-            <TextField label="תאריך יעד" type="date" value={form.dueDate} onChange={set("dueDate")} slotProps={{ inputLabel: { shrink: true } }} />
+            <DateField label="תאריך יעד" value={form.dueDate} onChange={v => setForm({ ...form, dueDate: v ?? "" })} />
 
             <Button type="submit" variant="contained" startIcon={<AddIcon />} disabled={busy}>הוספה</Button>
 

@@ -1,4 +1,4 @@
-import { UserRole } from "./enum";
+import type { MemberRole, UserRole } from "./enum";
 
 export class UserModel {
     idUser!: number;
@@ -19,6 +19,11 @@ export class UserDto {
     role!: UserRole;
     jobPercent!: number;
     isActive!: boolean;
+}
+
+export class UserProjectDto {
+    idProject!: number;
+    memberRole!: MemberRole;
 }
 
 export class AuthResponseModel {

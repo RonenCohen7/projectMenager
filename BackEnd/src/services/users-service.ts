@@ -1,9 +1,9 @@
 import { OkPacketParams } from "mysql2";
-import { UserDto, UserModel } from "../models/user-model";
+import { UserDto, UserModel, UserProjectDto } from "../models/user-model";
 import { dal } from "../utils/dal";
 import { ConflictError, ResourceNotFoundError, ValidationError } from "../models/client-errors";
 import { enumOrDefault, numberOrNull, sanitizeText } from "../utils/sanitize";
-import { UserRole } from "../enum/enum";
+import { MemberRole, UserRole } from "../enum/enum";
 import { appConfig } from "../utils/app-config";
 
 
@@ -130,6 +130,43 @@ class UserService {
         if (info.affectedRows === 0) {
             throw new ResourceNotFoundError(id);
         }
+    }
+
+
+    //Projects the user is allowed to work in (replaces the list, keeps load levels)
+    public async updateUserProjects(id: number, projects: UserProjectDto[]): Promise<void> {
+        await this.getOneUser(id);
+
+        const unique = new Map<number, MemberRole>();
+        for (const project of Array.isArray(projects) ? projects : []) {
+            const idProject = Number(project.idProject);
+            if (Number.isInteger(idProject) && idProject > 0) {
+                unique.set(idProject, enumOrDefault(project.memberRole, Object.values(MemberRole), MemberRole.Team));
+            }
+        }
+
+        await dal.transaction(async connection => {
+
+            const ids = [...unique.keys()];
+
+            if (ids.length) {
+                await connection.query(
+                    `DELETE FROM project_members WHERE id_user = ? AND id_project NOT IN (${ids.map(() => "?").join(",")})`,
+                    [id, ...ids]
+                );
+            } else {
+                await connection.query(`DELETE FROM project_members WHERE id_user = ?`, [id]);
+            }
+
+            for (const [idProject, memberRole] of unique) {
+                await connection.query(
+                    `INSERT INTO project_members (id_project, id_user, member_role)
+                     VALUES (?, ?, ?)
+                     ON DUPLICATE KEY UPDATE member_role = VALUES(member_role)`,
+                    [idProject, id, memberRole]
+                );
+            }
+        });
     }
 
 

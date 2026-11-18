@@ -15,11 +15,16 @@
     height: 10px;
 }
 
+.pstages-progress .spbar i {
+    background: var(--gradient);
+}
+
 .pstages-group-title {
-    padding: 8px 16px;
-    background: var(--sunken);
+    padding: 10px 16px;
+    background: #F8FAFC;
+    border-bottom: 1px solid var(--line);
     font-weight: 700;
-    font-size: 13.5px;
+    font-size: 14px;
 }
 
 .pstage {
@@ -40,12 +45,22 @@
     color: var(--muted);
 }
 
+.pstage {
+    border-right: 4px solid transparent;
+}
+
 .pstage.st-doing {
-    background: #F4F8FD;
+    background: #F5F7FF;
+    border-right-color: var(--accent);
 }
 
 .pstage.st-review {
-    background: #F8F4FC;
+    background: #FAF5FF;
+    border-right-color: #7C3AED;
+}
+
+.pstage.st-done {
+    border-right-color: var(--ok);
 }
 
 .pstages-add {

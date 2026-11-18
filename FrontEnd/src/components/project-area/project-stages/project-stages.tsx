@@ -9,6 +9,7 @@ import type { ProjectDetailsModel, StageDto, StageModel } from "../../models/pro
 import { stageStatusLabel, StageStatus, stageTemplates, MemberRole } from "../../models/enum";
 import { projectService } from "../../service/projectService";
 import { notificationService } from "../../service/notificationService";
+import { DateField } from "../../shared-area/date-field/date-field";
 
 
 //Work stages inside a project (sub tasks) - every member can update
@@ -94,8 +95,7 @@ export function ProjectStages({ project }: { project: ProjectDetailsModel }) {
                                 {owners.map(u => <MenuItem key={u.idUser} value={u.idUser}>{u.firstName}</MenuItem>)}
                             </TextField>
 
-                            <TextField label="תאריך יעד" type="date" value={stage.dueDate ?? ""} slotProps={{ inputLabel: { shrink: true } }}
-                                onChange={e => update(stage, { dueDate: e.target.value || null })} className="pstage-due" />
+                            <DateField label="תאריך יעד" value={stage.dueDate} onChange={v => update(stage, { dueDate: v })} className="pstage-due" />
 
                             <Tooltip title="מחיקת שלב">
                                 <IconButton size="small" onClick={() => remove(stage)}><DeleteOutlineIcon fontSize="small" /></IconButton>

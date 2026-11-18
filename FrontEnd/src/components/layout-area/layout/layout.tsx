@@ -1,6 +1,7 @@
 import "./layout.css";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import type { RootState } from "../../redux/store";
 import { Header } from "../header/header";
@@ -16,6 +17,10 @@ import { notificationService } from "../../service/notificationService";
 export function Layout() {
 
     const token = useSelector((state: RootState) => state.auth.token);
+    const { pathname } = useLocation();
+
+    //Opening screen and login - full screen without menu
+    const showMenu = !!token && pathname !== "/" && pathname !== "/login";
 
 
     //Load shared data after login
@@ -30,9 +35,9 @@ export function Layout() {
 
 
     return (
-        <div className={token ? "layout" : "layout no-menu"}>
+        <div className={showMenu ? "layout" : "layout no-menu"}>
 
-            {token && (
+            {showMenu && (
                 <>
                     <nav>
                         <Menu />
@@ -48,7 +53,7 @@ export function Layout() {
                 <Routing />
             </main>
 
-            {token && <ProjectDrawer />}
+            {showMenu && <ProjectDrawer />}
 
             <ToastContainer
                 position="bottom-left"

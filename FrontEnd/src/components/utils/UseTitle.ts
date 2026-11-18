@@ -3,6 +3,6 @@ import { useEffect } from "react";
 // Custom React Hook:
 export function useTitle(title: string): void {
     useEffect(() => {
-        document.title = `${title} · מעקב פרויקטים`;
+        document.title = `${title} · MT-Project`;
     }, [title]);
 }

@@ -114,7 +114,7 @@ export function StatusMeeting() {
 
 
     const tile = (n: number, label: string, cls = "", onClick?: () => void) => (
-        <button type="button" className={`mtile ${cls}`} onClick={onClick} disabled={!onClick}><b>{n}</b><span>{label}</span></button>
+        <button type="button" className={`kpi ${cls}`} onClick={onClick} disabled={!onClick}><b>{n}</b><span>{label}</span></button>
     );
 
 

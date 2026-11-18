@@ -12,6 +12,7 @@ import { useTitle } from "../../utils/UseTitle";
 import { currentQuarter, dueBucket, fmtDate, isPrivileged, planQuarters, quarterRank } from "../../utils/utils";
 import { planService } from "../../service/planService";
 import { notificationService } from "../../service/notificationService";
+import { DateField } from "../../shared-area/date-field/date-field";
 
 
 //Department work plan - goals by quarter / area
@@ -91,9 +92,9 @@ export function WorkPlan() {
             </header>
 
             <div className="plan-summary">
-                <div className="card"><b>{done}/{total}</b><span>הושלמו בסה״כ</span></div>
-                <div className="card"><b>{inQuarter.filter(x => x.status === PlanStatus.Completed).length}/{inQuarter.length}</b><span>ברבעון הנוכחי ({quarter})</span></div>
-                <div className={`card ${late.length ? "bad" : ""}`}><b>{late.length}</b><span>באיחור</span></div>
+                <div className="kpi good"><b>{done}/{total}</b><span>הושלמו בסה״כ</span></div>
+                <div className="kpi"><b>{inQuarter.filter(x => x.status === PlanStatus.Completed).length}/{inQuarter.length}</b><span>ברבעון הנוכחי ({quarter})</span></div>
+                <div className={`kpi ${late.length ? "bad" : "muted"}`}><b>{late.length}</b><span>באיחור</span></div>
                 <ToggleButtonGroup size="small" exclusive value={mode} onChange={(_, value) => value && setMode(value)}>
                     <ToggleButton value="quarter">לפי רבעון</ToggleButton>
                     <ToggleButton value="area">לפי תחום</ToggleButton>
@@ -198,7 +199,7 @@ function PlanDialog({ item, users, onClose, onSaved }: PlanDialogProps) {
                     <MenuItem value="">—</MenuItem>
                     {users.map(u => <MenuItem key={u.idUser} value={u.idUser}>{u.firstName}</MenuItem>)}
                 </TextField>
-                <TextField label="תאריך יעד" type="date" value={form.dueDate ?? ""} onChange={e => set("dueDate", e.target.value)} slotProps={{ inputLabel: { shrink: true } }} />
+                <DateField label="תאריך יעד" value={form.dueDate} onChange={v => set("dueDate", v)} />
                 <TextField label="מדד הצלחה" className="full" value={form.kpi} onChange={e => set("kpi", e.target.value)} />
                 <TextField label="הערות" multiline minRows={3} className="full" value={form.notes} onChange={e => set("notes", e.target.value)} />
             </DialogContent>

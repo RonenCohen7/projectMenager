@@ -14,6 +14,7 @@ import { WorkPlan } from "../../plan-area/work-plan/work-plan";
 import { InfoList } from "../../info-area/info-list/info-list";
 import { StaffList } from "../../staff-area/staff-list/staff-list";
 import { LoadMap } from "../../staff-area/load-map/load-map";
+import { Home } from "../../pages-area/home/home";
 
 
 const privileged = [UserRole.Admin, UserRole.Manager];
@@ -22,6 +23,7 @@ const privileged = [UserRole.Admin, UserRole.Manager];
 export function Routing() {
     return (
         <Routes>
+            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
 
             <Route path="/projects" element={<AuthGuard><ProjectList tab="active" /></AuthGuard>} />
@@ -41,7 +43,7 @@ export function Routing() {
 
             <Route path="/users" element={<AuthGuard roles={[UserRole.Admin]}><UserList /></AuthGuard>} />
 
-            <Route path="*" element={<Navigate to="/projects" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
     );
 }

@@ -1,0 +1,23 @@
+/* Task rows: soft, borderless date */
+.date-field.compact .MuiPickersOutlinedInput-root,
+.date-field.compact .MuiOutlinedInput-root {
+    background: var(--sunken);
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.date-field.compact .MuiPickersOutlinedInput-notchedOutline,
+.date-field.compact fieldset {
+    border: 0;
+}
+
+.date-field.late .MuiPickersOutlinedInput-root,
+.date-field.late .MuiOutlinedInput-root {
+    background: var(--off-soft);
+    color: #991B1B;
+    font-weight: 600;
+}
+
+.date-field .MuiPickersSectionList-root {
+    direction: ltr;
+}

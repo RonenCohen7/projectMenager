@@ -1,32 +1,63 @@
 .trow {
     display: grid;
-    grid-template-columns: auto 92px minmax(0, 1fr) 130px 140px auto;
-    gap: 10px;
+    grid-template-columns: auto 96px minmax(0, 1fr) 140px 150px 36px;
+    gap: 12px;
     align-items: center;
-    padding: 8px 14px;
-    border-top: 1px solid var(--line);
+    padding: 12px 18px;
+    border-top: 1px solid var(--sunken);
     border-right: 4px solid transparent;
+    transition: background .12s;
 }
 
 .trow:first-child {
     border-top: 0;
 }
 
-.trow.prio-urgent { border-right-color: var(--s-drop); }
-.trow.prio-high { border-right-color: var(--s-wait); }
+.trow:hover {
+    background: #F8FAFF;
+}
 
+.trow.prio-urgent { border-right-color: var(--off); }
+.trow.prio-high { border-right-color: var(--risk); }
+
+/* Round "done" tick */
 .trow-tick {
-    border: 1px solid var(--line) !important;
+    width: 30px;
+    height: 30px;
+    border: 2px solid #CBD5E1 !important;
+    color: transparent !important;
+    transition: all .15s !important;
 }
 
+.trow-tick:hover {
+    border-color: var(--ok) !important;
+    background: var(--ok-soft) !important;
+    color: var(--ok) !important;
+}
+
+.trow.done .trow-tick {
+    border-color: var(--ok) !important;
+    background: var(--ok) !important;
+    color: #FFFFFF !important;
+}
+
+/* Priority as a colored pill */
 .trow-prio {
-    font-size: 13px !important;
-    font-weight: 600;
+    height: 30px;
+    border-radius: 99px !important;
+    font-size: 12.5px !important;
+    font-weight: 700;
 }
 
-.trow-prio fieldset {
+.trow-prio fieldset,
+.trow-owner fieldset {
     border: 0;
 }
+
+.trow-prio.tag-urgent { background: var(--off-soft) !important; color: #991B1B; }
+.trow-prio.tag-high { background: var(--risk-soft) !important; color: #92400E; }
+.trow-prio.tag-normal { background: var(--sunken) !important; color: #475569; }
+.trow-prio.tag-low { background: var(--ok-soft) !important; color: #166534; }
 
 .trow-main {
     min-width: 0;
@@ -34,12 +65,14 @@
 
 .trow-text {
     font-weight: 500;
+    font-size: 14.5px;
 }
 
 .trow-meta {
     display: flex;
     flex-wrap: wrap;
     gap: 2px 12px;
+    margin-top: 2px;
     font-size: 12.5px;
     color: var(--muted);
 }
@@ -47,30 +80,24 @@
 .trow-meta .link {
     font-size: 12.5px;
     color: var(--accent);
+    font-weight: 500;
 }
 
 .trow-general {
-    color: var(--s-fix);
+    color: #6D28D9;
+    font-weight: 500;
 }
 
 .trow-owner {
+    height: 34px;
+    border-radius: 10px !important;
+    background: var(--sunken) !important;
     font-size: 13px !important;
 }
 
-.trow-due {
-    font: inherit;
-    font-size: 13px;
-    padding: 6px 8px;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    background: var(--surface);
-    color: var(--ink);
-}
-
-.trow-due.due-late {
-    border-color: var(--s-drop);
-    color: var(--s-drop);
-    font-weight: 600;
+.trow-due .MuiPickersInputBase-root,
+.trow-due .MuiInputBase-root {
+    height: 34px;
 }
 
 .trow.done .trow-text {

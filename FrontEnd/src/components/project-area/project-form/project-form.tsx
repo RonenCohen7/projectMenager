@@ -16,6 +16,7 @@ import { projectService } from "../../service/projectService";
 import { clientService } from "../../service/clientService";
 import { notificationService } from "../../service/notificationService";
 import { useProjectDrawer } from "../../utils/UseProjectDrawer";
+import { DateField } from "../../shared-area/date-field/date-field";
 
 
 interface ProjectFormProps {
@@ -183,7 +184,7 @@ export function ProjectForm({ project, kind, onSaved }: ProjectFormProps) {
                 {select("urgency", "דחיפות מול הלקוח", Object.values(Urgency).map(u => [u, urgencyLabel[u]]))}
 
                 <TextField label="דדליין" placeholder="למשל 31.12 או דצמבר" disabled={!canEdit} {...register("deadline")} />
-                <TextField label="תאריך סיום מתוכנן" type="date" disabled={!canEdit} slotProps={{ inputLabel: { shrink: true } }} {...register("endDate")} />
+                <DateField label="תאריך סיום מתוכנן" disabled={!canEdit} value={watch("endDate")} onChange={v => setValue("endDate", v ?? "")} />
                 <TextField label="איש קשר אצל הלקוח" disabled={!canEdit} {...register("contactName")} />
             </section>
 

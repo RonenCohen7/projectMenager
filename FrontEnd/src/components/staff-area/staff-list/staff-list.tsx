@@ -16,6 +16,7 @@ import { hiringService } from "../../service/hiringService";
 import { settingsService } from "../../service/settingsService";
 import { notificationService } from "../../service/notificationService";
 import { ClientChip, StatusPill } from "../../shared-area/tags/tags";
+import { DateField } from "../../shared-area/date-field/date-field";
 
 
 //Team: hiring + what every employee works on and how full the job is
@@ -197,7 +198,7 @@ function HiringDialog({ item, onClose, onSaved }: { item: HiringModel | null, on
                 </TextField>
                 <TextField label="מועמד/ת" value={form.candidateName} onChange={e => set("candidateName", e.target.value)} />
                 <TextField label="היקף משרה (%)" type="number" value={form.scopePercent ?? ""} onChange={e => set("scopePercent", e.target.value)} />
-                <TextField label="תחילת עבודה" type="date" value={form.startDate ?? ""} onChange={e => set("startDate", e.target.value)} slotProps={{ inputLabel: { shrink: true } }} />
+                <DateField label="תחילת עבודה" value={form.startDate} onChange={v => set("startDate", v)} />
                 <TextField label="מקור" value={form.source} onChange={e => set("source", e.target.value)} />
                 <TextField label="הערות" multiline minRows={3} className="full" value={form.notes} onChange={e => set("notes", e.target.value)} />
             </DialogContent>

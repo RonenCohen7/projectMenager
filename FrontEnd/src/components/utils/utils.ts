@@ -1,5 +1,6 @@
 import { LoadLevel, MemberRole, ProjectKind, ProjectStatus, LeadStatus, UserRole } from "../models/enum";
 import type { ProjectModel } from "../models/project-model";
+import type { TaskModel } from "../models/task-model";
 import type { HeatSettingsModel } from "../models/settings-model";
 import type { UserModel } from "../models/user-model";
 import { appConfig } from "./app-config";
@@ -237,4 +238,41 @@ export function percentOf(assignment: Assignment, idUser: number, heat: HeatSett
 export function jobUsage(items: Assignment[], user: UserModel, heat: HeatSettingsModel): number {
     const used = items.reduce((sum, a) => sum + percentOf(a, user.idUser, heat), 0);
     return Math.round(used / (user.jobPercent || 100) * 100);
+}
+
+
+// =========================
+// Project health (direction A)
+// =========================
+
+export type HealthLevel = "ok" | "risk" | "off" | "frozen";
+
+export const healthLabel: Record<HealthLevel, string> = { ok: "במסלול", risk: "בסיכון", off: "חורג", frozen: "מוקפא" };
+
+//off: deadline passed / task late. risk: stale, urgent, waiting for client. ok: everything else.
+export function projectHealth(project: ProjectModel, tasks: TaskModel[]): { level: HealthLevel, reason: string } {
+    if (project.status === ProjectStatus.Frozen || project.status === LeadStatus.Dropped) return { level: "frozen", reason: "הפרויקט מוקפא" };
+
+    const open = tasks.filter(t => t.idProject === project.idProject && !t.isDone);
+    const lateTask = open.find(t => dueBucket(t.dueDate) === "באיחור");
+    const endPassed = project.endDate && dueBucket(project.endDate) === "באיחור" && project.status !== ProjectStatus.Delivered && project.status !== ProjectStatus.Completed;
+
+    if (endPassed) return { level: "off", reason: `תאריך הסיום עבר (${fmtDate(project.endDate)})` };
+    if (lateTask) return { level: "off", reason: `משימה באיחור: ${lateTask.taskText}` };
+
+    if (project.urgency === "urgent" || project.urgency === "high") return { level: "risk", reason: `דחיפות ${project.urgency === "urgent" ? "דחוף" : "גבוה"} מול הלקוח` };
+    if (isStale(project)) {
+        const days = daysSince(project.lastUpdateDate);
+        return { level: "risk", reason: days == null ? "אין עדיין תיעוד" : `לא עודכן ${days} ימים` };
+    }
+    if (project.status === ProjectStatus.WaitingClient) return { level: "risk", reason: "ממתין ללקוח" };
+
+    return { level: "ok", reason: "במסלול" };
+}
+
+//Each team member gets his own color
+const personPalette = ["#4F46E5", "#0891B2", "#DB2777", "#7C3AED", "#059669", "#D97706", "#2563EB", "#BE185D", "#0D9488", "#9333EA"];
+
+export function personColor(idUser: number): string {
+    return personPalette[idUser % personPalette.length];
 }

@@ -9,6 +9,10 @@ import createCache from "@emotion/cache";
 import { prefixer } from "stylis";
 import rtlPlugin from "@mui/stylis-plugin-rtl";
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { heIL } from "@mui/x-date-pickers/locales";
+import "dayjs/locale/he";
 
 import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
@@ -53,10 +57,13 @@ createRoot(document.getElementById("root")!).render(
         <Provider store={store}>
             <CacheProvider value={rtlCache}>
                 <ThemeProvider theme={theme}>
-                    <CssBaseline />
-                    <BrowserRouter>
-                        <Layout />
-                    </BrowserRouter>
+                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="he"
+                        localeText={heIL.components.MuiLocalizationProvider.defaultProps.localeText}>
+                        <CssBaseline />
+                        <BrowserRouter>
+                            <Layout />
+                        </BrowserRouter>
+                    </LocalizationProvider>
                 </ThemeProvider>
             </CacheProvider>
         </Provider>

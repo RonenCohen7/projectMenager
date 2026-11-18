@@ -8,3 +8,61 @@
 .user-dialog .full {
     grid-column: 1 / -1;
 }
+
+.udlg-projects {
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+}
+
+.udlg-projects h3 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.udlg-projects h3 small {
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.udlg-projects .note {
+    margin: 4px 0 12px;
+}
+
+.udlg-list {
+    margin-top: 10px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.udlg-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px;
+    border-top: 1px solid var(--line);
+}
+
+.udlg-row:first-child {
+    border-top: 0;
+}
+
+.udlg-name {
+    flex: 1;
+    font-weight: 600;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.udlg-role {
+    width: 120px;
+    font-size: 13px !important;
+}
+
+.udlg-empty {
+    padding: 12px;
+    margin: 0 !important;
+}

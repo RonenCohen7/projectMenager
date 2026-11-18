@@ -1,12 +1,15 @@
 .tadd {
     display: flex;
     gap: 10px;
-    padding: 12px;
+    padding: 14px;
     align-items: center;
+    border-radius: 18px !important;
+    border: 1px dashed #C7D2FE !important;
+    background: #FAFAFF !important;
 }
 
 .tadd > * {
-    flex: 0 0 120px;
+    flex: 0 0 130px;
 }
 
 .tadd .tadd-text {
@@ -14,9 +17,10 @@
 }
 
 .tadd .tadd-project {
-    flex: 0 0 220px;
+    flex: 0 0 230px;
 }
 
 .tadd > button {
     flex: none;
+    height: 40px;
 }

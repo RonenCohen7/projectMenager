@@ -7,9 +7,10 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import type { RootState } from "../../redux/store";
 import type { UserModel } from "../../models/user-model";
-import { roleLabel } from "../../models/enum";
+import { MemberRole, memberRoleLabel, roleLabel } from "../../models/enum";
 import { useTitle } from "../../utils/UseTitle";
-import { fullName } from "../../utils/utils";
+import { fullName, isPrivileged, tabOf } from "../../utils/utils";
+import { useProjectDrawer } from "../../utils/UseProjectDrawer";
 import { userService } from "../../service/userService";
 import { notificationService } from "../../service/notificationService";
 import { UserDialog } from "../user-dialog/user-dialog";
@@ -28,7 +29,15 @@ export function UserList() {
     const [editing, setEditing] = useState<UserModel | "new" | null>(null);
 
 
-    const projectsCount = (idUser: number) => projects.filter(p => p.members.some(m => m.idUser === idUser)).length;
+    const { openProject } = useProjectDrawer();
+
+    //Open projects / leads the user is assigned to (finished ones are only counted)
+    const userProjects = (idUser: number) => projects
+        .filter(p => tabOf(p) !== "done" && p.members.some(m => m.idUser === idUser))
+        .map(p => ({ project: p, role: p.members.find(m => m.idUser === idUser)!.memberRole }))
+        .sort((a, b) => (a.project.clientName || "").localeCompare(b.project.clientName || "", "he"));
+
+    const doneCount = (idUser: number) => projects.filter(p => tabOf(p) === "done" && p.members.some(m => m.idUser === idUser)).length;
 
     const shown = users.filter(user => [fullName(user), user.email].join(" ").toLowerCase().includes(search.toLowerCase()));
 
@@ -67,7 +76,7 @@ export function UserList() {
                             <TableCell>מייל</TableCell>
                             <TableCell>הרשאה</TableCell>
                             <TableCell>היקף משרה</TableCell>
-                            <TableCell>פרויקטים</TableCell>
+                            <TableCell>פרויקטים מורשים</TableCell>
                             <TableCell>מצב</TableCell>
                             <TableCell />
                         </TableRow>
@@ -79,7 +88,24 @@ export function UserList() {
                                 <TableCell dir="ltr" className="user-email">{user.email}</TableCell>
                                 <TableCell><Chip size="small" label={roleLabel[user.role]} className={`role-chip role-${user.role}`} /></TableCell>
                                 <TableCell>{user.jobPercent}%</TableCell>
-                                <TableCell>{projectsCount(user.idUser)}</TableCell>
+                                <TableCell className="user-projects">
+                                    {isPrivileged(user.role) ? (
+                                        <span className="note">רואה את כל הפרויקטים</span>
+                                    ) : (
+                                        <>
+                                            {userProjects(user.idUser).map(({ project, role }) => (
+                                                <Tooltip key={project.idProject} title={memberRoleLabel[role]}>
+                                                    <button type="button" className={`uproj role-${role}`} onClick={() => openProject(project.idProject)}>
+                                                        {project.clientName}{project.projectName ? ` · ${project.projectName}` : ""}
+                                                        {role === MemberRole.Manager && <b> ★</b>}
+                                                    </button>
+                                                </Tooltip>
+                                            ))}
+                                            {!userProjects(user.idUser).length && <span className="note">לא שויך לפרויקטים</span>}
+                                            {doneCount(user.idUser) > 0 && <span className="note"> +{doneCount(user.idUser)} שהסתיימו</span>}
+                                        </>
+                                    )}
+                                </TableCell>
                                 <TableCell>{user.isActive ? "פעיל/ה" : "לא פעיל/ה"}</TableCell>
                                 <TableCell align="left" className="user-actions">
                                     <Tooltip title="עריכה"><IconButton size="small" onClick={() => setEditing(user)}><EditOutlinedIcon fontSize="small" /></IconButton></Tooltip>

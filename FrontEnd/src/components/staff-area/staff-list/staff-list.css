@@ -5,16 +5,17 @@
 }
 
 .sttable th {
-    padding: 8px 12px;
+    padding: 10px 14px;
     text-align: start;
-    background: var(--sunken);
+    font-size: 12.5px;
+    background: #F8FAFC;
     color: var(--muted);
     font-weight: 700;
 }
 
 .sttable td {
-    padding: 8px 12px;
-    border-top: 1px solid var(--line);
+    padding: 10px 14px;
+    border-top: 1px solid var(--sunken);
     vertical-align: middle;
 }
 
@@ -61,12 +62,13 @@
 }
 
 .staff-card {
-    padding: 14px 16px;
-    border-top: 4px solid var(--s-done);
+    padding: 18px 20px;
+    border-radius: 18px !important;
+    border-top: 4px solid var(--ok) !important;
 }
 
-.staff-card.full { border-top-color: var(--s-wait); }
-.staff-card.over { border-top-color: var(--s-drop); }
+.staff-card.full { border-top-color: var(--risk) !important; }
+.staff-card.over { border-top-color: var(--off) !important; }
 
 .staff-head {
     display: flex;
@@ -76,8 +78,9 @@
 }
 
 .staff-head h3 {
-    margin: 0;
-    font-size: 16px;
+    margin: 0 0 2px;
+    font-size: 17px;
+    font-weight: 700;
 }
 
 .staff-usage {
@@ -88,7 +91,8 @@
 }
 
 .staff-usage b {
-    font-size: 20px;
+    font-size: 24px;
+    font-weight: 800;
 }
 
 .staff-usage small {
@@ -106,11 +110,11 @@
 .jpbar i {
     display: block;
     height: 100%;
-    background: var(--s-done);
+    background: var(--ok);
 }
 
-.staff-card.full .jpbar i { background: var(--s-wait); }
-.staff-card.over .jpbar i { background: var(--s-drop); }
+.staff-card.full .jpbar i { background: var(--risk); }
+.staff-card.over .jpbar i { background: var(--off); }
 
 .hire-dialog {
     display: grid;

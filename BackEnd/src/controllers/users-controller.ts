@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { UserDto } from "../models/user-model";
+import { UserDto, UserProjectDto } from "../models/user-model";
 import { userService } from "../services/users-service";
 import { allowRoles } from "../middleware/role-middleware";
 import { verifyToken } from "../middleware/verify-token";
@@ -18,6 +18,9 @@ class UserController {
         this.router.post("/api/users", verifyToken, allowRoles(UserRole.Admin), this.addUser);
         this.router.put("/api/users/:id", verifyToken, allowRoles(UserRole.Admin), this.updateUser);
         this.router.delete("/api/users/:id", verifyToken, allowRoles(UserRole.Admin), this.deleteUser);
+
+        //Projects the user may enter and work in
+        this.router.put("/api/users/:id/projects", verifyToken, allowRoles(UserRole.Admin), this.updateUserProjects);
     }
 
 
@@ -59,6 +62,23 @@ class UserController {
             const updatedUser = await userService.updateUser(id, user, request.user!.idUser);
 
             response.json(updatedUser);
+
+        } catch (err: any) {
+            next(err)
+        }
+    }
+
+
+    //Update the projects of a user
+    private async updateUserProjects(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
+            const id = Number(request.params.id);
+
+            const projects: UserProjectDto[] = request.body?.projects ?? [];
+
+            await userService.updateUserProjects(id, projects);
+
+            response.sendStatus(204);
 
         } catch (err: any) {
             next(err)

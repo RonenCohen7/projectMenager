@@ -1,0 +1,49 @@
+.brand-img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* Logo on a dark background */
+.brand-img.brand-light {
+    padding: 6px 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .92);
+}
+
+.brand-word {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    direction: ltr;
+    font-family: "Segoe UI", Arial, sans-serif;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.brand-word b {
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.brand-word i {
+    font-style: normal;
+    opacity: .4;
+}
+
+.brand-word span {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 3px;
+}
+
+.brand-word.brand-dark { color: #16212C; }
+.brand-word.brand-dark b { color: #1E5B7A; }
+
+.brand-word.brand-light { color: #E6F1F8; }
+.brand-word.brand-light b {
+    background: linear-gradient(90deg, #5EEAD4, #38BDF8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}

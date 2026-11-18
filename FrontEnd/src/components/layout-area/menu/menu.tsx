@@ -19,7 +19,7 @@ import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlin
 import type { RootState } from "../../redux/store";
 import { InvoiceStatus, UserRole } from "../../models/enum";
 import { isPrivileged, tabOf } from "../../utils/utils";
-import logo from "../../../assets/logo.svg";
+import { BrandLogo } from "../../shared-area/brand/brand";
 
 
 type MenuLink = { to: string, label: string, icon: ReactNode, count?: number, roles?: UserRole[] };
@@ -72,13 +72,11 @@ export function Menu() {
     return (
         <div className="menu">
 
-            <div className="menu-brand">
-                <img src={logo} alt="" />
-                <div>
-                    <strong>מעקב פרויקטים</strong>
-                    <span>{isPrivileged(user?.role) ? "כל הפרויקטים" : "הפרויקטים שלי"}</span>
-                </div>
-            </div>
+            <NavLink to="/" end className="menu-brand">
+                <strong dir="ltr">MT-Project</strong>
+                <span>{isPrivileged(user?.role) ? "כל הפרויקטים" : "הפרויקטים שלי"}</span>
+                <BrandLogo tone="light" className="menu-logo" />
+            </NavLink>
 
             {groups.map(group => {
                 const links = group.links.filter(link => !link.roles || (user && link.roles.includes(user.role)));

@@ -2,13 +2,13 @@ import "./login.css";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Button, TextField } from "@mui/material";
 import type { RootState } from "../../redux/store";
 import { useTitle } from "../../utils/UseTitle";
 import { authService } from "../../service/authService";
 import { notificationService } from "../../service/notificationService";
-import logo from "../../../assets/logo.svg";
+import { BrandLogo } from "../../shared-area/brand/brand";
 
 
 type LoginForm = { email: string, code: string };
@@ -66,11 +66,14 @@ export function Login() {
 
     return (
         <section className="login-page">
+            <span className="login-glow g1" aria-hidden="true" />
+            <span className="login-glow g2" aria-hidden="true" />
+
             <div className="login-card">
 
                 <div className="login-header">
-                    <img src={logo} alt="" />
-                    <h1>מעקב פרויקטים</h1>
+                    <BrandLogo />
+                    <h1 dir="ltr">MT-Project</h1>
                     <p>
                         {step === "email"
                             ? "מזינים את כתובת המייל ונשלח אליה קוד כניסה חד-פעמי"
@@ -116,6 +119,7 @@ export function Login() {
                 )}
 
                 <p className="login-note">החיבור תקף ל-12 שעות. אחר כך יתבקש קוד חדש.</p>
+                <Link to="/" className="login-home">→ חזרה למסך הפתיחה</Link>
             </div>
         </section>
     );

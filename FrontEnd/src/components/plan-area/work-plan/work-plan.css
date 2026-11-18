@@ -4,24 +4,8 @@
     gap: 10px;
 }
 
-.plan-summary .card {
-    display: flex;
-    flex-direction: column;
-    padding: 10px 18px;
-    min-width: 160px;
-}
-
-.plan-summary .card b {
-    font-size: 22px;
-}
-
-.plan-summary .card span {
-    font-size: 13px;
-    color: var(--muted);
-}
-
-.plan-summary .card.bad b {
-    color: var(--s-drop);
+.plan-summary .kpi {
+    min-width: 190px;
 }
 
 .plan-summary > :last-child {
@@ -33,12 +17,17 @@
     color: var(--accent);
 }
 
+.section-title.current small {
+    background: var(--accent-soft);
+    color: #3730A3;
+}
+
 .plrow {
     display: grid;
     grid-template-columns: 140px minmax(0, 1fr) auto;
-    gap: 14px;
+    gap: 16px;
     align-items: start;
-    padding: 12px 16px;
+    padding: 14px 20px;
     border-top: 1px solid var(--line);
 }
 

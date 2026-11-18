@@ -11,6 +11,7 @@ import { dueBucket, fmtDate, isPrivileged } from "../../utils/utils";
 import { useProjectDrawer } from "../../utils/UseProjectDrawer";
 import { taskService } from "../../service/taskService";
 import { notificationService } from "../../service/notificationService";
+import { DateField } from "../../shared-area/date-field/date-field";
 
 
 interface TaskRowProps {
@@ -96,8 +97,8 @@ export function TaskRow({ task, hideProject }: TaskRowProps) {
                     .map(u => <MenuItem key={u.idUser} value={u.idUser}>{u.firstName}</MenuItem>)}
             </Select>
 
-            <input type="date" className={`trow-due due-${bucket === "באיחור" && !task.isDone ? "late" : "ok"}`} value={task.dueDate ?? ""} disabled={task.isDone}
-                title={task.dueDate ? bucket : "תאריך יעד"} onChange={e => update({ dueDate: e.target.value || null })} />
+            <DateField compact late={bucket === "באיחור" && !task.isDone} value={task.dueDate} disabled={task.isDone}
+                onChange={v => update({ dueDate: v })} className="trow-due" />
 
             {canDelete ? (
                 <Tooltip title="מחיקה"><IconButton size="small" onClick={remove}><DeleteOutlineIcon fontSize="small" /></IconButton></Tooltip>
