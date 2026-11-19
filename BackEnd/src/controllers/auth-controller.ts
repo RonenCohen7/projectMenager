@@ -45,7 +45,7 @@ class AuthController {
                 httpOnly: true,
                 secure: request.secure,
                 sameSite: "strict",
-                path: "/api",
+                path: process.env.COOKIE_PATH || "/api",
                 maxAge: appConfig.jwtExpiresHours * 60 * 60 * 1000
             });
 
@@ -83,7 +83,7 @@ class AuthController {
                 }
             }
 
-            response.clearCookie("accessToken", { path: "/api" });
+            response.clearCookie("accessToken", { path: process.env.COOKIE_PATH || "/api" });
             response.sendStatus(204);
 
         } catch (err) {
