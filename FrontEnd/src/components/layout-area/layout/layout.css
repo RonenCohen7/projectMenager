@@ -14,10 +14,25 @@
     overflow: hidden;
 }
 
+.layout.has-credit {
+    grid-template-rows: 64px minmax(0, 1fr) auto;
+    grid-template-areas:
+        "menu header"
+        "menu main"
+        "menu footer";
+}
+
 .layout.no-menu {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr);
     grid-template-areas: "main";
+}
+
+.layout.no-menu.has-credit {
+    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-areas:
+        "main"
+        "footer";
 }
 
 .layout > nav {
@@ -37,4 +52,11 @@
     min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
+}
+
+.layout > .app-foot {
+    grid-area: footer;
+    padding: 10px 28px 14px;
+    background: var(--bg);
+    border-top: 1px solid var(--line);
 }

@@ -8,6 +8,7 @@ import { Header } from "../header/header";
 import { Menu } from "../menu/menu";
 import { Routing } from "../routing/routing";
 import { ProjectDrawer } from "../../project-area/project-drawer/project-drawer";
+import { SiteCredit } from "../../shared-area/site-credit/site-credit";
 import { projectService } from "../../service/projectService";
 import { userService } from "../../service/userService";
 import { authService } from "../../service/authService";
@@ -22,6 +23,8 @@ export function Layout() {
 
     //Opening screen and login - full screen without menu
     const showMenu = !!session && pathname !== "/" && pathname !== "/login";
+    //Home has the line inside its own footer. Everywhere else it sits under the page.
+    const showCredit = pathname !== "/";
 
 
     //Load shared data after login + live updates from the server (changes of other users appear at once)
@@ -42,7 +45,7 @@ export function Layout() {
 
 
     return (
-        <div className={showMenu ? "layout" : "layout no-menu"}>
+        <div className={`layout${showMenu ? "" : " no-menu"}${showCredit ? " has-credit" : ""}`}>
 
             {showMenu && (
                 <>
@@ -59,6 +62,12 @@ export function Layout() {
             <main>
                 <Routing />
             </main>
+
+            {showCredit && (
+                <footer className="app-foot">
+                    <SiteCredit />
+                </footer>
+            )}
 
             {showMenu && <ProjectDrawer />}
 

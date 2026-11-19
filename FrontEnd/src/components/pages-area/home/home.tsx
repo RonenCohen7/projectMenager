@@ -7,6 +7,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import type { RootState } from "../../redux/store";
 import { useTitle } from "../../utils/UseTitle";
 import { BrandLogo } from "../../shared-area/brand/brand";
+import { SiteCredit } from "../../shared-area/site-credit/site-credit";
 import hero from "../../../assets/home-hero.webp";
 
 
@@ -129,7 +130,10 @@ export function Home() {
 
             </div>
 
-            <footer className="home-foot">Training and more · ייעוץ ופיתוח פתרונות למידה מתקדמים לארגונים ולמערכות חינוך</footer>
+            <footer className="home-foot">
+                <div>Training and more · ייעוץ ופיתוח פתרונות למידה מתקדמים לארגונים ולמערכות חינוך</div>
+                <SiteCredit />
+            </footer>
 
         </section>
     );
