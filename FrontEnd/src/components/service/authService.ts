@@ -28,11 +28,11 @@ class AuthService {
         return response.data;
     }
 
-    //Logout
+    //Logout - the server revokes the token and deletes the cookie
     public async logout(): Promise<void> {
+        await axios.post(appConfig.authUrl + "logout").catch(() => undefined);
         store.dispatch(logout());
         store.dispatch(clearData());
-        await axios.post(appConfig.authUrl + "logout").catch(() => undefined);
     }
 
 }

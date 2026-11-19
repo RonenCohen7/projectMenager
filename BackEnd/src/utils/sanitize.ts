@@ -11,6 +11,12 @@ export function sanitizeText(value: unknown): string {
 }
 
 
+//Email format (simple and strict enough: name@domain.tld, no spaces)
+export function isEmail(value: string): boolean {
+    return value.length <= 200 && /^[^\s@<>()",;]+@[^\s@<>()",;]+\.[^\s@<>()",;]{2,}$/.test(value);
+}
+
+
 //Empty string -> null (for optional columns)
 export function cleanOrNull(value: unknown): string | null {
     const text = sanitizeText(value);

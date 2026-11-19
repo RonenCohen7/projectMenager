@@ -26,7 +26,8 @@ export class UserProjectDto {
     memberRole!: MemberRole;
 }
 
+//Token comes in an httpOnly cookie - not in the response
 export class AuthResponseModel {
-    token!: string;
     user!: UserModel;
+    expiresAt!: number;
 }

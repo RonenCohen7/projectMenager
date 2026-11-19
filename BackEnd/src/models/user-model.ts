@@ -31,9 +31,16 @@ export class TokenUser {
     role!: UserRole;
 }
 
+//Token goes only in the httpOnly cookie - the browser gets the user and when the session ends
 export class AuthResponseModel {
+    user!: UserModel;
+    expiresAt!: number;
+}
+
+export class LoginResult {
     token!: string;
     user!: UserModel;
+    expiresAt!: number;
 }
 
 

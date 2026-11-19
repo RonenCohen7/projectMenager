@@ -3,11 +3,12 @@ import jwt from "jsonwebtoken";
 
 import { dal } from "../utils/dal";
 import { appConfig } from "../utils/app-config";
-import { sanitizeText } from "../utils/sanitize";
+import { isEmail, sanitizeText } from "../utils/sanitize";
 import { mailService } from "./mail-service";
 import { ValidationError, UnauthorizedError, ResourceNotFoundError } from "../models/client-errors";
-import { StatusCode } from "../enum/enum";
-import { AuthResponseModel, UserModel } from "../models/user-model";
+import { LoginResult, UserModel } from "../models/user-model";
+import { securityLog } from "../utils/security-log";
+import { Request } from "express";
 import { userService } from "./users-service";
 
 
@@ -22,12 +23,6 @@ type PendingCode = {
     sentAt: number;
     attempts: number;
 };
-
-
-class EmailNotFoundError {
-    public status = StatusCode.NotFound;
-    public message = "המייל לא רשום במערכת או שהמשתמש לא פעיל";
-}
 
 
 class AuthService {
@@ -52,11 +47,12 @@ class AuthService {
     // ============================================================
     // STEP 1 - SEND RANDOM CODE TO EMAIL (no password)
     // ============================================================
-    public async requestCode(email: string): Promise<void> {
+    //Same answer for registered / unknown email - the answer does not reveal who is a user
+    public async requestCode(email: string, request: Request): Promise<void> {
 
         const cleanEmail = this.cleanEmail(email);
 
-        if (!cleanEmail || !cleanEmail.includes("@")) {
+        if (!isEmail(cleanEmail)) {
             throw new ValidationError("יש להזין כתובת מייל תקינה");
         }
 
@@ -73,12 +69,14 @@ class AuthService {
         const user = users[0];
 
         if (!user) {
-            throw new EmailNotFoundError();
+            securityLog("login_code_unknown_email", request, { email: cleanEmail });
+            return;
         }
 
         const existing = this.pendingCodes.get(cleanEmail);
         if (existing && Date.now() - existing.sentAt < RESEND_COOLDOWN_MS) {
-            throw new ValidationError("קוד נשלח לפני פחות מדקה, בדקו את תיבת המייל");
+            securityLog("login_code_cooldown", request, { email: cleanEmail });
+            return;
         }
 
         const code = crypto.randomInt(0, 1_000_000).toString().padStart(6, "0");
@@ -90,6 +88,8 @@ class AuthService {
             sentAt: Date.now(),
             attempts: 0
         });
+
+        securityLog("login_code_requested", request, { email: cleanEmail, idUser: user.idUser });
 
         if (!mailService.isConfigured() && appConfig.isDevelopment) {
             console.log(`[DEV] Login code for ${cleanEmail}: ${code}`);
@@ -113,7 +113,7 @@ class AuthService {
     // ============================================================
     // STEP 2 - VERIFY CODE -> JWT FOR 12 HOURS
     // ============================================================
-    public async verifyCode(email: string, code: string): Promise<AuthResponseModel> {
+    public async verifyCode(email: string, code: string, request: Request): Promise<LoginResult> {
 
         const cleanEmail = this.cleanEmail(email);
         const cleanCode = String(code ?? "").trim();
@@ -122,6 +122,7 @@ class AuthService {
 
         if (!pending || pending.expiresAt < Date.now()) {
             this.pendingCodes.delete(cleanEmail);
+            securityLog("login_failed", request, { email: cleanEmail, reason: pending ? "code_expired" : "no_code" });
             throw new UnauthorizedError("הקוד פג תוקף, בקשו קוד חדש");
         }
 
@@ -133,8 +134,10 @@ class AuthService {
         if (!crypto.timingSafeEqual(expected, actual)) {
             if (pending.attempts >= MAX_ATTEMPTS) {
                 this.pendingCodes.delete(cleanEmail);
+                securityLog("login_locked", request, { email: cleanEmail, idUser: pending.idUser, attempts: pending.attempts });
                 throw new UnauthorizedError("יותר מדי ניסיונות, בקשו קוד חדש");
             }
+            securityLog("login_failed", request, { email: cleanEmail, idUser: pending.idUser, reason: "wrong_code", attempts: pending.attempts });
             throw new ValidationError("הקוד שגוי");
         }
 
@@ -142,13 +145,23 @@ class AuthService {
 
         const user = await this.getActiveUser(pending.idUser);
 
+        const versions = await dal.execute(`SELECT token_version AS tv FROM users WHERE id_user = ?`, [user.idUser]) as { tv: number }[];
+
         const token = jwt.sign(
-            { idUser: user.idUser, role: user.role },
+            { idUser: user.idUser, tv: versions[0]?.tv ?? 0 },
             appConfig.jwtSecret,
-            { expiresIn: `${appConfig.jwtExpiresHours}h` }
+            { algorithm: "HS256", expiresIn: `${appConfig.jwtExpiresHours}h` }
         );
 
-        return { token, user };
+        securityLog("login_success", request, { email: cleanEmail, idUser: user.idUser });
+
+        return { token, user, expiresAt: Date.now() + appConfig.jwtExpiresHours * 60 * 60 * 1000 };
+    }
+
+
+    //Logout - raises the token version: every token of the user (all devices) stops working
+    public async revokeTokens(idUser: number): Promise<void> {
+        await dal.execute(`UPDATE users SET token_version = token_version + 1 WHERE id_user = ?`, [idUser]);
     }
 
 

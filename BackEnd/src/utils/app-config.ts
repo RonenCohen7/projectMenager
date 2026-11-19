@@ -43,6 +43,35 @@ class AppConfig {
 
     public readonly mailFrom = process.env.MAIL_FROM;
 
+
+    //Fail fast on missing / weak secrets - the server does not start with a placeholder secret
+    public validate(): void {
+        const errors: string[] = [];
+
+        if (!this.jwtSecret || this.jwtSecret.length < 32) {
+            errors.push("JWT_SECRET must be at least 32 characters (openssl rand -hex 32)");
+        }
+        else if (/change_me|secret|example/i.test(this.jwtSecret)) {
+            errors.push("JWT_SECRET is still the example value - generate a new one (openssl rand -hex 32)");
+        }
+
+        for (const [name, value] of [["MYSQL_HOST", this.mysqlHost], ["MYSQL_USER", this.mysqlUser], ["MYSQL_PASSWORD", this.mysqlPassword], ["MYSQL_DATABASE", this.mysqlDatabase]]) {
+            if (!value) errors.push(`${name} is missing`);
+        }
+
+        if (this.isProduction && /change_me/i.test(this.mysqlPassword ?? "")) {
+            errors.push("MYSQL_PASSWORD is still the example value");
+        }
+
+        if (errors.length) {
+            throw new Error("Configuration error:\n - " + errors.join("\n - "));
+        }
+
+        if (this.isProduction && !(this.smtpHost && this.smtpUser && this.smtpPass && this.mailFrom)) {
+            console.warn("WARNING: SMTP is not configured - users will not receive login codes");
+        }
+    }
+
 }
 
 export const appConfig = new AppConfig();

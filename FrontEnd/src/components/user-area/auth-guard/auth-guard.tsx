@@ -13,10 +13,10 @@ interface AuthGuardProps {
 
 export function AuthGuard({ children, roles }: AuthGuardProps) {
 
-    const token = useSelector((state: RootState) => state.auth.token);
+    const session = useSelector((state: RootState) => state.auth.expiresAt);
     const user = useSelector((state: RootState) => state.auth.user);
 
-    if (!token || !user) {
+    if (!session || !user) {
         return <Navigate to="/login" replace />;
     }
 

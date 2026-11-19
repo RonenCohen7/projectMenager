@@ -24,14 +24,11 @@ import { Layout } from "./components/layout-area/layout/layout";
 import { clientId } from "./components/service/liveService";
 
 
-//Token on every request, 401 -> back to login
+//Token is sent by the browser in the httpOnly cookie. 401 -> back to login
 axios.defaults.withCredentials = true;
 
 axios.interceptors.request.use(config => {
-    const token = store.getState().auth.token;
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
+    config.headers["X-Requested-With"] = "XMLHttpRequest"; //CSRF - the server rejects changes without it
     config.headers["X-Client-Id"] = clientId; //live updates: this tab skips its own changes
     return config;
 });
@@ -39,7 +36,7 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(
     response => response,
     error => {
-        if (error?.response?.status === 401 && store.getState().auth.token) {
+        if (error?.response?.status === 401 && store.getState().auth.user) {
             store.dispatch(logout());
         }
         return Promise.reject(error);

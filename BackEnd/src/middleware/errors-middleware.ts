@@ -3,6 +3,7 @@ import { RouteNotFoundError } from "../models/client-errors";
 
 import { appConfig } from "../utils/app-config";
 import { StatusCode } from "../enum/enum";
+import { securityLog } from "../utils/security-log";
 
 
 class ErrorMiddleware {
@@ -13,7 +14,25 @@ class ErrorMiddleware {
 
 
     public catchAll(err: any, request: Request, response: Response, next: NextFunction) {
-        console.error(err);
+
+        //Body that is not valid JSON
+        if (err?.type === "entity.parse.failed") {
+            response.status(StatusCode.BadRequest).json({ message: "בקשה לא תקינה" });
+            return;
+        }
+
+        //Text longer than the column (instead of a server error)
+        if (err?.code === "ER_DATA_TOO_LONG") {
+            response.status(StatusCode.BadRequest).json({ message: "אחד השדות ארוך מדי" });
+            return;
+        }
+
+        if (err?.status === StatusCode.Forbidden) {
+            securityLog("access_denied", request, { reason: err.message });
+        }
+        else if (!err?.status || err.status >= 500) {
+            console.error(err);
+        }
 
         //Duplicate unique key from MySQL
         if (err?.code === "ER_DUP_ENTRY") {

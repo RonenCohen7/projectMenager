@@ -19,7 +19,7 @@ export function Login() {
 
     useTitle("כניסה");
 
-    const token = useSelector((state: RootState) => state.auth.token);
+    const session = useSelector((state: RootState) => state.auth.expiresAt);
     const navigate = useNavigate();
 
     const { register, handleSubmit, getValues, setValue } = useForm<LoginForm>();
@@ -28,7 +28,7 @@ export function Login() {
     const [busy, setBusy] = useState(false);
 
 
-    if (token) {
+    if (session) {
         return <Navigate to="/projects" replace />;
     }
 
@@ -38,7 +38,7 @@ export function Login() {
         setBusy(true);
         try {
             await authService.requestCode(form.email);
-            notificationService.success("שלחנו קוד כניסה למייל");
+            notificationService.success("אם המייל רשום במערכת, נשלח אליו קוד כניסה");
             setValue("code", "");
             setStep("code");
         } catch (err) {

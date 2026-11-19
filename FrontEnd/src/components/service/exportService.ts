@@ -11,7 +11,10 @@ class ExportService {
 
     private toCsv(rows: unknown[][]): string {
         return "﻿" + rows.map(row => row.map(cell => {
-            const text = String(cell ?? "");
+            let text = String(cell ?? "");
+            //Excel runs a cell that starts with = + - @ as a formula (CSV injection) - make it plain text
+            //(numbers and phone numbers like +972-50... stay as they are)
+            if (/^[=+\-@\t\r]/.test(text) && !/^[+-]?[\d\s().-]+$/.test(text)) text = "'" + text;
             return /[",\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
         }).join(",")).join("\r\n");
     }

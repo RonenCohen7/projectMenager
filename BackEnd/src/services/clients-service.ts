@@ -2,7 +2,7 @@ import { OkPacketParams } from "mysql2";
 import { ClientDto, ClientModel } from "../models/client-model";
 import { dal } from "../utils/dal";
 import { ResourceNotFoundError, ValidationError } from "../models/client-errors";
-import { cleanOrNull, sanitizeText } from "../utils/sanitize";
+import { cleanOrNull, isEmail, sanitizeText } from "../utils/sanitize";
 
 
 class ClientService {
@@ -57,7 +57,7 @@ class ClientService {
         const info = await dal.execute(sql, [
             clientName,
             cleanOrNull(client.contactName),
-            cleanOrNull(client.contactEmail),
+            this.cleanEmails(client.contactEmail),
             cleanOrNull(client.contactPhone),
             cleanOrNull(client.notes)
         ]) as OkPacketParams;
@@ -85,7 +85,7 @@ class ClientService {
         const info = await dal.execute(sql, [
             clientName,
             cleanOrNull(client.contactName),
-            cleanOrNull(client.contactEmail),
+            this.cleanEmails(client.contactEmail),
             cleanOrNull(client.contactPhone),
             cleanOrNull(client.notes),
             id
@@ -122,6 +122,16 @@ class ClientService {
 
         const info = await dal.execute(`INSERT INTO clients (client_name) VALUES (?)`, [clientName]) as OkPacketParams;
         return info.insertId!;
+    }
+
+
+    //Contact email(s) - one or more, separated by , or ;
+    private cleanEmails(value: unknown): string | null {
+        const text = cleanOrNull(value);
+        if (!text) return null;
+        const parts = text.split(/[,;]/).map(part => part.trim()).filter(Boolean);
+        if (!parts.every(isEmail)) throw new ValidationError("כתובת המייל של איש הקשר לא תקינה");
+        return parts.join(", ");
     }
 
 }

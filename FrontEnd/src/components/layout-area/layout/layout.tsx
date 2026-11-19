@@ -17,16 +17,16 @@ import { liveService } from "../../service/liveService";
 
 export function Layout() {
 
-    const token = useSelector((state: RootState) => state.auth.token);
+    const session = useSelector((state: RootState) => state.auth.expiresAt);
     const { pathname } = useLocation();
 
     //Opening screen and login - full screen without menu
-    const showMenu = !!token && pathname !== "/" && pathname !== "/login";
+    const showMenu = !!session && pathname !== "/" && pathname !== "/login";
 
 
     //Load shared data after login + live updates from the server (changes of other users appear at once)
     useEffect(() => {
-        if (!token) {
+        if (!session) {
             liveService.stop();
             return;
         }
@@ -38,7 +38,7 @@ export function Layout() {
         liveService.start();
         return () => liveService.stop();
 
-    }, [token]);
+    }, [session]);
 
 
     return (

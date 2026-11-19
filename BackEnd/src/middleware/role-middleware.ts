@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { UserRole } from "../enum/enum";
+import { securityLog } from "../utils/security-log";
 
 
 export function allowRoles(...roles: UserRole[]) {
@@ -11,6 +12,7 @@ export function allowRoles(...roles: UserRole[]) {
             return;
         }
         if (!roles.includes(user.role)) {
+            securityLog("access_denied", request, { role: user.role, required: roles });
             response.status(403).json({ message: "אין לך הרשאה לפעולה הזו" });
             return;
         }

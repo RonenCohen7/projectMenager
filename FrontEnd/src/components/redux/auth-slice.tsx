@@ -1,34 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { jwtDecode } from "jwt-decode";
 import type { AuthResponseModel, UserModel } from "../models/user-model";
 
 
+//The token itself is only in an httpOnly cookie (JavaScript cannot read it - safe from XSS).
+//Here: who is logged in and until when (12 hours) - not secret.
 export interface AuthState {
-    token: string | null;
+    expiresAt: number | null;
     user: UserModel | null;
 }
 
 
-//Token is valid 12 hours - expired token is ignored
-function loadToken(): string | null {
-    const token = localStorage.getItem("token");
-    if (!token) return null;
+function loadSession(): AuthState {
     try {
-        const { exp } = jwtDecode<{ exp: number }>(token);
-        return exp * 1000 > Date.now() ? token : null;
+        const expiresAt = Number(localStorage.getItem("expiresAt"));
+        const storedUser = localStorage.getItem("user");
+        if (expiresAt > Date.now() && storedUser && storedUser !== "undefined") {
+            return { expiresAt, user: JSON.parse(storedUser) };
+        }
     } catch {
-        return null;
+        //storage not available
     }
+    localStorage.removeItem("token"); //older version kept the token here
+    return { expiresAt: null, user: null };
 }
 
-const token = loadToken();
-const storedUser = localStorage.getItem("user");
-
-const initialState: AuthState = {
-    token,
-    user: token && storedUser && storedUser !== "undefined" ? JSON.parse(storedUser) : null
-};
+const initialState: AuthState = loadSession();
 
 const authSlice = createSlice({
     name: "auth",
@@ -36,10 +33,10 @@ const authSlice = createSlice({
 
     reducers: {
         login(state, action: PayloadAction<AuthResponseModel>) {
-            state.token = action.payload.token;
+            state.expiresAt = action.payload.expiresAt;
             state.user = action.payload.user;
 
-            localStorage.setItem("token", action.payload.token);
+            localStorage.setItem("expiresAt", String(action.payload.expiresAt));
             localStorage.setItem("user", JSON.stringify(action.payload.user));
         },
         setUser(state, action: PayloadAction<UserModel>) {
@@ -47,11 +44,12 @@ const authSlice = createSlice({
             localStorage.setItem("user", JSON.stringify(action.payload));
         },
         logout(state) {
-            state.token = null;
+            state.expiresAt = null;
             state.user = null;
 
-            localStorage.removeItem("token");
+            localStorage.removeItem("expiresAt");
             localStorage.removeItem("user");
+            localStorage.removeItem("token");
         }
     }
 });

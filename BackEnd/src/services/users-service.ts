@@ -2,7 +2,7 @@ import { OkPacketParams } from "mysql2";
 import { UserDto, UserModel, UserProjectDto } from "../models/user-model";
 import { dal } from "../utils/dal";
 import { ConflictError, ResourceNotFoundError, ValidationError } from "../models/client-errors";
-import { enumOrDefault, numberOrNull, sanitizeText } from "../utils/sanitize";
+import { enumOrDefault, isEmail, numberOrNull, sanitizeText } from "../utils/sanitize";
 import { MemberRole, UserRole } from "../enum/enum";
 import { appConfig } from "../utils/app-config";
 
@@ -22,6 +22,19 @@ class UserService {
             updated_at AS updatedAt
         FROM users
     `;
+
+
+    //Columns added after the first version (existing databases are upgraded on start)
+    public async ensureSchema(): Promise<void> {
+        const columns = await dal.execute(
+            `SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'token_version'`
+        ) as any[];
+
+        if (!columns[0]) {
+            await dal.execute(`ALTER TABLE users ADD COLUMN token_version INT UNSIGNED NOT NULL DEFAULT 0`);
+            console.log("DB upgraded: users.token_version");
+        }
+    }
 
 
     //Create first admin from .env if missing
@@ -63,7 +76,7 @@ class UserService {
         const clean = this.cleanUser(user);
 
         if (!clean.firstName) throw new ValidationError("יש למלא שם פרטי");
-        if (!clean.email.includes("@")) throw new ValidationError("יש להזין כתובת מייל תקינה");
+        if (!isEmail(clean.email)) throw new ValidationError("יש להזין כתובת מייל תקינה");
 
         const existing = await dal.execute(`SELECT id_user FROM users WHERE email = ?`, [clean.email]) as any[];
         if (existing[0]) {
@@ -94,7 +107,7 @@ class UserService {
         const clean = this.cleanUser({ ...current, ...user });
 
         if (!clean.firstName) throw new ValidationError("יש למלא שם פרטי");
-        if (!clean.email.includes("@")) throw new ValidationError("יש להזין כתובת מייל תקינה");
+        if (!isEmail(clean.email)) throw new ValidationError("יש להזין כתובת מייל תקינה");
 
         const isActive = user.isActive ?? current.isActive;
 

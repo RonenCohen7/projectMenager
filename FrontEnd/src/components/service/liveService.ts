@@ -1,5 +1,6 @@
 import { appConfig } from "../utils/app-config";
 import { store } from "../redux/store";
+import { logout } from "../redux/auth-slice";
 import { isPrivileged } from "../utils/utils";
 import { authService } from "./authService";
 import { projectService } from "./projectService";
@@ -46,20 +47,19 @@ class LiveService {
     }
 
 
-    //fetch + stream (and not EventSource) - so the token goes in a header and not in the url
+    //fetch + stream - reconnects with backoff and reloads what was missed
     private async connect(controller: AbortController, isRetry: boolean): Promise<void> {
 
-        const token = store.getState().auth.token;
-        if (!token || controller.signal.aborted) return;
+        if (!store.getState().auth.user || controller.signal.aborted) return;
 
         try {
             const response = await fetch(appConfig.baseUrl + "live", {
-                headers: { Authorization: `Bearer ${token}`, Accept: "text/event-stream" },
+                headers: { Accept: "text/event-stream" }, //token goes in the httpOnly cookie
                 credentials: "include",
                 signal: controller.signal
             });
 
-            if (response.status === 401) return; //token expired - axios sends to login on the next request
+            if (response.status === 401) { store.dispatch(logout()); return; } //session ended
             if (!response.ok || !response.body) throw new Error("live " + response.status);
 
             this.retryMs = 1000;

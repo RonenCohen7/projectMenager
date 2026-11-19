@@ -1,7 +1,8 @@
 import express, { NextFunction, Request, Response } from "express";
 import { authService } from "../services/auth-service";
 import { loginCodeLimiter } from "../middleware/rate-limit-middleware";
-import { verifyToken } from "../middleware/verify-token";
+import { readToken, resolveToken, verifyToken } from "../middleware/verify-token";
+import { securityLog } from "../utils/security-log";
 import { appConfig } from "../utils/app-config";
 
 
@@ -21,9 +22,9 @@ class AuthController {
     //Login - Step 1 - Send random code to email
     private async requestCode(request: Request, response: Response, next: NextFunction): Promise<void> {
         try {
-            await authService.requestCode(request.body?.email);
+            await authService.requestCode(request.body?.email, request);
 
-            response.json({ message: "הקוד נשלח למייל" });
+            response.json({ message: "אם המייל רשום במערכת, נשלח אליו קוד כניסה" });
 
         } catch (err) {
             next(err)
@@ -36,16 +37,19 @@ class AuthController {
         try {
             const { email, code } = request.body ?? {};
 
-            const auth = await authService.verifyCode(email, code);
+            const auth = await authService.verifyCode(email, code, request);
 
+            //Token only in an httpOnly cookie - JavaScript (and XSS) cannot read it.
+            //secure when the site is served over HTTPS (X-Forwarded-Proto from nginx)
             response.cookie("accessToken", auth.token, {
                 httpOnly: true,
-                secure: appConfig.isProduction,
-                sameSite: "lax",
+                secure: request.secure,
+                sameSite: "strict",
+                path: "/api",
                 maxAge: appConfig.jwtExpiresHours * 60 * 60 * 1000
             });
 
-            response.json(auth);
+            response.json({ user: auth.user, expiresAt: auth.expiresAt });
 
         } catch (err) {
             next(err)
@@ -66,10 +70,25 @@ class AuthController {
     }
 
 
-    //Logout
+    //Logout - the token is revoked on the server (not only deleted from the browser)
     private async logout(request: Request, response: Response, next: NextFunction): Promise<void> {
-        response.clearCookie("accessToken");
-        response.sendStatus(204);
+        try {
+            const token = readToken(request);
+            if (token) {
+                const result = await resolveToken(token);
+                if ("user" in result) {
+                    await authService.revokeTokens(result.user.idUser);
+                    request.user = result.user;
+                    securityLog("logout", request);
+                }
+            }
+
+            response.clearCookie("accessToken", { path: "/api" });
+            response.sendStatus(204);
+
+        } catch (err) {
+            next(err)
+        }
     }
 
 }

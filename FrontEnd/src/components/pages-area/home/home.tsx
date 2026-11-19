@@ -18,7 +18,7 @@ export function Home() {
 
     useTitle("ברוכים הבאים");
 
-    const token = useSelector((state: RootState) => state.auth.token);
+    const session = useSelector((state: RootState) => state.auth.expiresAt);
     const navigate = useNavigate();
 
     const stage = useRef<HTMLDivElement>(null);
@@ -50,8 +50,8 @@ export function Home() {
 
             <header className="home-top">
                 <BrandLogo tone="light" />
-                <Button variant="outlined" className="home-top-btn" onClick={() => navigate(token ? "/projects" : "/login")}>
-                    {token ? "למסך הראשי" : "כניסה"}
+                <Button variant="outlined" className="home-top-btn" onClick={() => navigate(session ? "/projects" : "/login")}>
+                    {session ? "למסך הראשי" : "כניסה"}
                 </Button>
             </header>
 
@@ -68,8 +68,8 @@ export function Home() {
                     </ul>
 
                     <Button variant="contained" size="large" className="home-cta" endIcon={<ArrowBackIcon />}
-                        onClick={() => navigate(token ? "/projects" : "/login")}>
-                        {token ? "כניסה למסך הראשי" : "כניסה עם מייל"}
+                        onClick={() => navigate(session ? "/projects" : "/login")}>
+                        {session ? "כניסה למסך הראשי" : "כניסה עם מייל"}
                     </Button>
                     <span className="home-note">ללא סיסמה – קוד חד-פעמי נשלח למייל שלך</span>
                 </div>

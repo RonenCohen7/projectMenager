@@ -18,6 +18,14 @@ BackEnd/.env
 FrontEnd/.env
 
 # ==========================
+# TLS certificates / private keys
+# ==========================
+certs/
+certbot-www/
+*.pem
+*.key
+
+# ==========================
 # Old tracker data (client info) - delivered separately
 # ==========================
 dataBase/02-seed.sql
@@ -28,3 +36,4 @@ dataBase/02-seed.sql
 *.log
 .DS_Store
 .vscode/
+*.tsbuildinfo

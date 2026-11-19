@@ -6,6 +6,8 @@ import cookieParser from "cookie-parser";
 import { appConfig } from "./utils/app-config";
 import { errorMiddleware } from "./middleware/errors-middleware";
 import { apiLimiter } from "./middleware/rate-limit-middleware";
+import { securityMiddleware } from "./middleware/security-middleware";
+import { securityLog } from "./utils/security-log";
 
 import { authController } from "./controllers/auth-controller";
 import { userController } from "./controllers/users-controller";
@@ -26,6 +28,8 @@ class App {
 
     public async start(): Promise<void> {
         try {
+
+            appConfig.validate();
 
             const app = express();
 
@@ -50,10 +54,20 @@ class App {
                     }
                 }
 
-                callback(allowed ? null : new Error("Not allowed by CORS"), { origin: allowed, credentials: true });
+                if (!allowed) {
+                    securityLog("cors_blocked", request, { origin });
+                    callback(Object.assign(new Error("Not allowed by CORS"), { status: 403 }), { origin: false });
+                    return;
+                }
+
+                callback(null, { origin: true, credentials: true });
             }));
 
             app.use(express.json({ limit: "1mb" }));
+
+            app.use("/api", securityMiddleware.csrfGuard);
+
+            app.use(securityMiddleware.auditChanges);
 
             app.use("/api", apiLimiter);
 
@@ -76,6 +90,7 @@ class App {
             app.use(errorMiddleware.routeNotFound);
             app.use(errorMiddleware.catchAll);
 
+            await userService.ensureSchema();
             await userService.ensureAdmin();
 
             app.listen(appConfig.port, () => {
