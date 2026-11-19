@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { MenuItem, TextField, Tooltip } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import type { RootState } from "../../redux/store";
 import type { ProjectModel } from "../../models/project-model";
 import type { TaskModel } from "../../models/task-model";
@@ -68,6 +69,7 @@ export function ProjectList({ tab }: { tab: ProjectTab }) {
     const [sort, setSort] = useState<SortKey>(tab === "active" ? "attention" : "last");
     const [statusFilter, setStatusFilter] = useState<string | null>(null);
     const [view, setView] = useState<ViewMode>(() => (localStorage.getItem("projectsView") as ViewMode) || "list");
+    const [opened, setOpened] = useState<Record<string, boolean>>({});
     const heat = useSelector((state: RootState) => state.data.heat);
 
     const privileged = isPrivileged(me?.role);
@@ -127,6 +129,31 @@ export function ProjectList({ tab }: { tab: ProjectTab }) {
     );
 
     const shown = [...filtered].sort(sorters[sort]);
+
+    const filtering = Boolean(search || person || statusFilter || clientFilter);
+
+    const groups = useMemo(() => {
+        const order: string[] = [];
+        const map = new Map<string, ProjectModel[]>();
+        for (const project of shown) {
+            const key = String(project.idClient ?? "none");
+            if (!map.has(key)) {
+                map.set(key, []);
+                order.push(key);
+            }
+            map.get(key)!.push(project);
+        }
+        return order.map(key => {
+            const list = map.get(key)!;
+            return { key, name: list[0].clientName || "ללא לקוח", idClient: list[0].idClient, projects: list };
+        });
+    }, [shown]);
+
+    const groupOpen = (key: string) => filtering || !!opened[key];
+
+    function toggleGroup(key: string) {
+        setOpened(prev => ({ ...prev, [key]: !groupOpen(key) }));
+    }
 
     const staleCount = inTab.filter(isStale).length;
     const attention = inTab.filter(needsAttention).sort(sorters.attention);
@@ -350,31 +377,46 @@ export function ProjectList({ tab }: { tab: ProjectTab }) {
                             <div className="pl-row pl-th">
                                 <span /><span>פרויקט</span><span>שלב בעבודה</span><span>צוות</span><span>הצעד הבא</span><span>סטטוס</span>
                             </div>
-                            {shown.map(p => {
-                                const health = healthOf.get(p.idProject)!;
+                            {groups.map(group => {
+                                const open = groupOpen(group.key);
                                 return (
-                                    <button key={p.idProject} type="button" className="pl-row" onClick={() => openProject(p.idProject)}>
-                                        <Tooltip title={`${healthLabel[health.level]} · ${health.reason}`}>
-                                            <span className={`pl-health h-${health.level}`} />
-                                        </Tooltip>
+                                    <div key={group.key} className="pl-group">
+                                        <button type="button" className="pl-client-row" aria-expanded={open} onClick={() => toggleGroup(group.key)}>
+                                            <ExpandMoreIcon className={`pl-chevron${open ? " open" : ""}`} fontSize="small" />
+                                            <span className="pl-client-badge" style={{ background: `hsl(${hueOf(group.idClient)} 70% 94%)`, color: `hsl(${hueOf(group.idClient)} 60% 28%)` }}>
+                                                {group.name.slice(0, 1)}
+                                            </span>
+                                            <span className="pl-client-name">{group.name}</span>
+                                            <small>{group.projects.length} {group.projects.length === 1 ? "פרויקט" : "פרויקטים"}</small>
+                                        </button>
+                                        {open && group.projects.map(p => {
+                                            const health = healthOf.get(p.idProject)!;
+                                            return (
+                                                <button key={p.idProject} type="button" className="pl-row" onClick={() => openProject(p.idProject)}>
+                                                    <Tooltip title={`${healthLabel[health.level]} · ${health.reason}`}>
+                                                        <span className={`pl-health h-${health.level}`} />
+                                                    </Tooltip>
 
-                                        <div className="pl-project">
-                                            {clientBadge(p)}
-                                            <div className="pl-project-text">
-                                                <span className="pl-client">{p.clientName || "ללא לקוח"}</span>
-                                                <span className="pl-name">{p.projectName || "פרויקט כללי"}</span>
-                                                <span className={`pl-updated${isStale(p) ? " stale" : ""}`}>{updatedText(p)}</span>
-                                            </div>
-                                        </div>
+                                                    <div className="pl-project">
+                                                        {clientBadge(p)}
+                                                        <div className="pl-project-text">
+                                                            <span className="pl-client">{p.clientName || "ללא לקוח"}</span>
+                                                            <span className="pl-name">{p.projectName || "פרויקט כללי"}</span>
+                                                            <span className={`pl-updated${isStale(p) ? " stale" : ""}`}>{updatedText(p)}</span>
+                                                        </div>
+                                                    </div>
 
-                                        {stageBar(p)}
-                                        {team(p)}
-                                        {next(p)}
-                                        <span className="pl-status"><StatusPill status={p.status} /></span>
-                                    </button>
+                                                    {stageBar(p)}
+                                                    {team(p)}
+                                                    {next(p)}
+                                                    <span className="pl-status"><StatusPill status={p.status} /></span>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
                                 );
                             })}
-                            <div className="pl-table-foot">מוצגים {shown.length} מתוך {inTab.length}</div>
+                            <div className="pl-table-foot">מוצגים {shown.length} מתוך {inTab.length} · {groups.length} לקוחות</div>
                         </section>
                     )}
 

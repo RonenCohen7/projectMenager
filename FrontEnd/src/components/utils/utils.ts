@@ -146,6 +146,15 @@ export function hoursLeftText(allocated?: number | string | null, billable?: num
     return left < 0 ? `חריגה של ${-left} ש׳` : `${left} ש׳` + (Number(allocated) ? "" : " (לפי שעות לחיוב)");
 }
 
+//Hours past the plan. The plan is allocated hours, or billable hours when nothing was allocated.
+//Same baseline as hoursLeftText. Null when there is no plan to compare.
+export function hoursOverrun(allocated?: number | string | null, billable?: number | string | null, done?: number | string | null): number | null {
+    const base = Number(allocated) || Number(billable) || 0;
+    if (!base) return null;
+    const over = (Number(done) || 0) - base;
+    return over > 0 ? over : 0;
+}
+
 
 // =========================
 // Load map (same rules as the old system)

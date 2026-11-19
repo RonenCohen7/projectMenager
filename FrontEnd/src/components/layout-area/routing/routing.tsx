@@ -14,6 +14,7 @@ import { WorkPlan } from "../../plan-area/work-plan/work-plan";
 import { InfoList } from "../../info-area/info-list/info-list";
 import { StaffList } from "../../staff-area/staff-list/staff-list";
 import { LoadMap } from "../../staff-area/load-map/load-map";
+import { HoursList } from "../../project-area/hours-list/hours-list";
 import { Home } from "../../pages-area/home/home";
 
 
@@ -27,6 +28,7 @@ export function Routing() {
             <Route path="/login" element={<Login />} />
 
             <Route path="/projects" element={<AuthGuard><ProjectList tab="active" /></AuthGuard>} />
+            <Route path="/hours" element={<AuthGuard><HoursList /></AuthGuard>} />
             <Route path="/leads" element={<AuthGuard><ProjectList tab="lead" /></AuthGuard>} />
             <Route path="/done" element={<AuthGuard><ProjectList tab="done" /></AuthGuard>} />
             <Route path="/meeting" element={<AuthGuard><StatusMeeting /></AuthGuard>} />

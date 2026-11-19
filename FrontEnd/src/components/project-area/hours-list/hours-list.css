@@ -1,0 +1,78 @@
+.hours-search {
+    flex: 0 1 320px;
+    display: flex;
+    align-items: center;
+    height: 42px;
+    padding: 0 14px;
+    border-radius: 14px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+}
+
+.hours-search input {
+    width: 100%;
+    border: 0;
+    outline: none;
+    font: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    background: transparent;
+}
+
+.hours-table {
+    overflow-x: auto;
+}
+
+.hours-row {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(140px, 1.1fr) minmax(180px, 1.6fr) 120px repeat(4, minmax(88px, .7fr));
+    gap: 12px;
+    align-items: center;
+    padding: 12px 16px;
+    border: 0;
+    border-bottom: 1px solid var(--sunken);
+    background: none;
+    font: inherit;
+    color: inherit;
+    text-align: start;
+    cursor: pointer;
+}
+
+.hours-th,
+.hours-foot {
+    cursor: default;
+}
+
+.hours-th {
+    background: #F8FAFC;
+    border-bottom: 1px solid var(--line);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.hours-row:not(.hours-th):not(.hours-foot):hover {
+    background: #F8FAFF;
+}
+
+.hours-name {
+    font-weight: 700;
+    min-width: 0;
+}
+
+.hours-over {
+    color: var(--off);
+    font-weight: 700;
+}
+
+.hours-foot {
+    background: #F8FAFC;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.hours-foot .hours-over {
+    color: var(--off);
+}

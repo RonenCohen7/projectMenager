@@ -319,6 +319,50 @@
     color: var(--muted);
 }
 
+.pl-client-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    background: #F8FAFC;
+    font: inherit;
+    color: inherit;
+    text-align: start;
+    cursor: pointer;
+}
+
+.pl-client-row:hover {
+    background: #F1F5F9;
+}
+
+.pl-chevron {
+    flex: none;
+    color: var(--muted);
+    transition: transform .15s;
+    transform: rotate(90deg);
+}
+
+.pl-chevron.open {
+    transform: none;
+}
+
+.pl-client-name {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.pl-client-row small {
+    padding: 1px 9px;
+    border-radius: 99px;
+    background: var(--sunken);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+}
+
 /* Health dot */
 .pl-health {
     width: 12px;

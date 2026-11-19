@@ -16,6 +16,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import GridOnOutlinedIcon from "@mui/icons-material/GridOnOutlined";
 import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
+import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import type { RootState } from "../../redux/store";
 import { InvoiceStatus, UserRole } from "../../models/enum";
 import { isPrivileged, tabOf } from "../../utils/utils";
@@ -52,6 +53,7 @@ export function Menu() {
         {
             title: "ניהול",
             links: [
+                { to: "/hours", label: "ניהול זמנים", icon: <AccessTimeOutlinedIcon /> },
                 { to: "/invoices", label: "חשבוניות", icon: <ReceiptLongOutlinedIcon />, roles: privileged, count: projects.filter(p => p.invoiceStatus === InvoiceStatus.Ready).length },
                 { to: "/clients", label: "לקוחות", icon: <BusinessOutlinedIcon />, roles: privileged },
                 { to: "/plan", label: "תוכנית עבודה", icon: <EventNoteOutlinedIcon /> },
