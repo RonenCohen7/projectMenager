@@ -7,7 +7,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import type { RootState } from "../../redux/store";
 import { useTitle } from "../../utils/UseTitle";
 import { BrandLogo } from "../../shared-area/brand/brand";
-import hero from "../../../assets/learning-hero.svg";
+import hero from "../../../assets/home-hero.webp";
 
 
 const features = ["פרויקטים ולקוחות", "תיעוד פגישות", "משימות וקנבן", "שלבי פיתוח לומדה", "חשבוניות", "מפת עומסים"];
@@ -43,13 +43,8 @@ export function Home() {
     return (
         <section className="home" onMouseMove={onMove} onMouseLeave={onLeave}>
 
-            <div className="home-bg" aria-hidden="true">
-                <span className="home-blob b1" /><span className="home-blob b2" /><span className="home-blob b3" />
-                <span className="home-grid" />
-            </div>
-
             <header className="home-top">
-                <BrandLogo tone="light" />
+                <BrandLogo tone="dark" />
                 <Button variant="outlined" className="home-top-btn" onClick={() => navigate(session ? "/projects" : "/login")}>
                     {session ? "למסך הראשי" : "כניסה"}
                 </Button>
@@ -74,15 +69,61 @@ export function Home() {
                     <span className="home-note">ללא סיסמה – קוד חד-פעמי נשלח למייל שלך</span>
                 </div>
 
-                {/* 3D scene */}
+                {/* 3D scene: the image tilts with the mouse and floats, with light and motion layers on top */}
                 <div className="home-stage" ref={stage}>
                     <div className="home-scene">
-                        <img src={hero} alt="" className="home-hero" />
+                        <div className="home-photo">
+                            {/* Image + motion layers move together (zoom, mouse depth) */}
+                            <div className="home-layer">
+                            <img src={hero} alt="מחשב נייד עם לומדה אינטראקטיבית ונתוני פרויקטים" className="home-hero" />
 
-                        <div className="glass g1"><b>לומדה אינטראקטיבית</b><span>7 שלבים · 82% הושלם</span><i className="gbar"><em /></i></div>
-                        <div className="glass g2"><b>AI</b><span>תסריט · תרגום · עיצוב</span></div>
-                        <div className="glass g3"><b>סרטון הדרכה</b><span>בהפקה</span></div>
-                        <div className="glass g4"><b>מפת עומסים</b><span>מי פנוי לפרויקט הבא</span></div>
+                            {/* Motion layers (same 1024x576 frame as the image) */}
+                            <svg className="home-fx" viewBox="0 0 1024 576" aria-hidden="true">
+                                <defs>
+                                    <radialGradient id="fxDot">
+                                        <stop offset="0" stopColor="#FFFFFF" />
+                                        <stop offset=".35" stopColor="#C4B5FD" />
+                                        <stop offset="1" stopColor="#8B5CF6" stopOpacity="0" />
+                                    </radialGradient>
+                                    <radialGradient id="fxNode">
+                                        <stop offset="0" stopColor="#FFFFFF" />
+                                        <stop offset=".4" stopColor="#5EEAD4" />
+                                        <stop offset="1" stopColor="#5EEAD4" stopOpacity="0" />
+                                    </radialGradient>
+                                </defs>
+
+                                {/* Light running around the orbit ring */}
+                                <path id="fxOrbit" d="M 196 418 a 316 92 0 1 0 632 0 a 316 92 0 1 0 -632 0" fill="none" />
+                                <circle r="14" fill="url(#fxDot)">
+                                    <animateMotion dur="9s" repeatCount="indefinite"><mpath href="#fxOrbit" /></animateMotion>
+                                </circle>
+                                <circle r="9" fill="url(#fxDot)" opacity=".7">
+                                    <animateMotion dur="9s" begin="-4.5s" repeatCount="indefinite"><mpath href="#fxOrbit" /></animateMotion>
+                                </circle>
+
+                                {/* Network points pulse */}
+                                <g className="fx-nodes">
+                                    <circle cx="257" cy="186" r="10" fill="url(#fxNode)" />
+                                    <circle cx="330" cy="148" r="10" fill="url(#fxNode)" style={{ animationDelay: "-1s" }} />
+                                    <circle cx="690" cy="204" r="16" fill="url(#fxNode)" style={{ animationDelay: "-2s" }} />
+                                    <circle cx="770" cy="203" r="10" fill="url(#fxNode)" style={{ animationDelay: "-.5s" }} />
+                                    <circle cx="690" cy="252" r="8" fill="url(#fxNode)" style={{ animationDelay: "-1.5s" }} />
+                                </g>
+
+                                {/* Rising sparkles */}
+                                <g className="fx-sparks" fill="#FFFFFF">
+                                    <circle cx="420" cy="330" r="2" />
+                                    <circle cx="610" cy="300" r="1.6" style={{ animationDelay: "-2s" }} />
+                                    <circle cx="500" cy="360" r="1.8" style={{ animationDelay: "-4s" }} />
+                                    <circle cx="560" cy="250" r="1.4" style={{ animationDelay: "-1s" }} />
+                                    <circle cx="380" cy="270" r="1.5" style={{ animationDelay: "-3s" }} />
+                                </g>
+                            </svg>
+                            </div>
+
+                            {/* Light sweep */}
+                            <span className="home-glare" aria-hidden="true" />
+                        </div>
                     </div>
                 </div>
 
