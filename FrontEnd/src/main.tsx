@@ -21,6 +21,7 @@ import { store } from "./components/redux/store";
 import { logout } from "./components/redux/auth-slice";
 import { theme } from "./components/utils/theme";
 import { Layout } from "./components/layout-area/layout/layout";
+import { clientId } from "./components/service/liveService";
 
 
 //Token on every request, 401 -> back to login
@@ -31,6 +32,7 @@ axios.interceptors.request.use(config => {
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
+    config.headers["X-Client-Id"] = clientId; //live updates: this tab skips its own changes
     return config;
 });
 

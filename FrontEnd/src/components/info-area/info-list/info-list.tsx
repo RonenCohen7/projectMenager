@@ -31,7 +31,7 @@ export function InfoList() {
     const me = useSelector((state: RootState) => state.auth.user);
     const canEdit = isPrivileged(me?.role);
 
-    const [items, setItems] = useState<InfoModel[]>([]);
+    const items = useSelector((state: RootState) => state.data.info) ?? [];
     const [category, setCategory] = useState<InfoCategory | "">("");
     const [search, setSearch] = useState("");
     const [editing, setEditing] = useState<InfoModel | "new" | null>(null);
@@ -39,7 +39,7 @@ export function InfoList() {
 
     async function load() {
         try {
-            setItems(await infoService.getAll());
+            await infoService.getAll();
         } catch (err) {
             notificationService.error(err);
         }
@@ -54,7 +54,6 @@ export function InfoList() {
     async function togglePin(item: InfoModel) {
         try {
             await infoService.update(item.idInfo, { ...item, body: item.body ?? "", isPinned: !item.isPinned });
-            await load();
         } catch (err) {
             notificationService.error(err);
         }
@@ -64,7 +63,6 @@ export function InfoList() {
         if (!window.confirm(`למחוק את "${item.title}"?`)) return;
         try {
             await infoService.delete(item.idInfo);
-            await load();
         } catch (err) {
             notificationService.error(err);
         }
@@ -123,7 +121,7 @@ export function InfoList() {
                 </div></div>
             )}
 
-            {editing && <InfoDialog item={editing === "new" ? null : editing} onClose={() => setEditing(null)} onSaved={() => { setEditing(null); load(); }} />}
+            {editing && <InfoDialog item={editing === "new" ? null : editing} onClose={() => setEditing(null)} onSaved={() => setEditing(null)} />}
 
         </section>
     );

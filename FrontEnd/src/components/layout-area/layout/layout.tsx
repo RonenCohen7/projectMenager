@@ -12,6 +12,7 @@ import { projectService } from "../../service/projectService";
 import { userService } from "../../service/userService";
 import { authService } from "../../service/authService";
 import { notificationService } from "../../service/notificationService";
+import { liveService } from "../../service/liveService";
 
 
 export function Layout() {
@@ -23,13 +24,19 @@ export function Layout() {
     const showMenu = !!token && pathname !== "/" && pathname !== "/login";
 
 
-    //Load shared data after login
+    //Load shared data after login + live updates from the server (changes of other users appear at once)
     useEffect(() => {
-        if (!token) return;
+        if (!token) {
+            liveService.stop();
+            return;
+        }
 
         authService.refreshMe()
             .then(() => Promise.all([projectService.refresh(), userService.getAllUsers()]))
             .catch(err => notificationService.error(err));
+
+        liveService.start();
+        return () => liveService.stop();
 
     }, [token]);
 

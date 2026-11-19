@@ -25,14 +25,14 @@ export function WorkPlan() {
 
     const canEdit = isPrivileged(me?.role);
 
-    const [items, setItems] = useState<PlanModel[]>([]);
+    const items = useSelector((state: RootState) => state.data.plan) ?? [];
     const [mode, setMode] = useState<"quarter" | "area">("quarter");
     const [editing, setEditing] = useState<PlanModel | "new" | null>(null);
 
 
     async function load() {
         try {
-            setItems(await planService.getAll());
+            await planService.getAll();
         } catch (err) {
             notificationService.error(err);
         }
@@ -63,7 +63,6 @@ export function WorkPlan() {
     async function setStatus(item: PlanModel, status: PlanStatus) {
         try {
             await planService.update(item.idPlan, { ...item, status } as PlanDto);
-            await load();
         } catch (err) {
             notificationService.error(err);
         }
@@ -73,7 +72,6 @@ export function WorkPlan() {
         if (!window.confirm(`למחוק את "${item.title}"?`)) return;
         try {
             await planService.delete(item.idPlan);
-            await load();
         } catch (err) {
             notificationService.error(err);
         }
@@ -137,7 +135,7 @@ export function WorkPlan() {
 
             {editing && (
                 <PlanDialog item={editing === "new" ? null : editing} users={users.filter(u => u.isActive)}
-                    onClose={() => setEditing(null)} onSaved={() => { setEditing(null); load(); }} />
+                    onClose={() => setEditing(null)} onSaved={() => setEditing(null)} />
             )}
 
         </section>

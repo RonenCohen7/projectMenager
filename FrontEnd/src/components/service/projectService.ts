@@ -6,6 +6,7 @@ import { appConfig } from "../utils/app-config";
 import { store } from "../redux/store";
 import { setProjects } from "../redux/data-slice";
 import { taskService } from "./taskService";
+import { clientService } from "./clientService";
 
 
 
@@ -24,9 +25,14 @@ class ProjectService {
         return response.data;
     }
 
-    //Lists + tasks after a change
+    //Lists + tasks after a change (clients too if loaded - a project may add a new client)
     public async refresh(): Promise<void> {
-        await Promise.all([this.getAllProjects(), taskService.getTasks()]);
+        const loadClients = store.getState().data.clients !== null;
+        await Promise.all([
+            this.getAllProjects(),
+            taskService.getTasks(),
+            loadClients ? clientService.getAllClients() : Promise.resolve()
+        ]);
     }
 
     //Add Project / Lead

@@ -43,21 +43,19 @@ export function ClientList() {
     const user = useSelector((state: RootState) => state.auth.user);
     const projects = useSelector((state: RootState) => state.data.projects);
 
-    const [clients, setClients] = useState<ClientModel[]>([]);
+    const clients = useSelector((state: RootState) => state.data.clients) ?? [];
     const [search, setSearch] = useState("");
     const [tierFilter, setTierFilter] = useState<Tier | "">("");
     const [editing, setEditing] = useState<ClientModel | "new" | null>(null);
 
 
     // =========================
-    // Load clients (again when projects change - counts)
+    // Load clients into the store (changes arrive live)
     // =========================
 
     useEffect(() => {
-        clientService.getAllClients()
-            .then(setClients)
-            .catch(err => notificationService.error(err));
-    }, [projects]);
+        clientService.getAllClients().catch(err => notificationService.error(err));
+    }, []);
 
 
     const withTier = clients
@@ -75,9 +73,8 @@ export function ClientList() {
     const clientProjects = (idClient: number) => projects.filter(p => p.idClient === idClient && tabOf(p) !== "done");
 
 
-    async function saved() {
+    function saved() {
         setEditing(null);
-        setClients(await clientService.getAllClients());
     }
 
 
@@ -85,7 +82,6 @@ export function ClientList() {
         if (!window.confirm(`למחוק את הלקוח ${client.clientName}? הפרויקטים שלו יישארו ללא לקוח.`)) return;
         try {
             await clientService.deleteClient(client.idClient);
-            setClients(await clientService.getAllClients());
             notificationService.success("הלקוח נמחק");
         } catch (err) {
             notificationService.error(err);

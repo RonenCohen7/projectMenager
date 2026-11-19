@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { Autocomplete, Button, MenuItem, TextField } from "@mui/material";
 import type { RootState } from "../../redux/store";
 import type { ProjectDetailsModel, ProjectDto, ProjectMemberDto } from "../../models/project-model";
-import type { ClientModel } from "../../models/client-model";
 import type { UserModel } from "../../models/user-model";
 import {
     InvoiceStatus, invoiceLabel, leadStatuses, MemberRole, memberRoleLabel, ProjectKind, ProjectPhase, phaseLabel,
@@ -37,7 +36,7 @@ export function ProjectForm({ project, kind, onSaved }: ProjectFormProps) {
     const canEdit = isPrivileged(me?.role);
     const statuses = kind === ProjectKind.Lead ? leadStatuses : projectStatuses;
 
-    const [clients, setClients] = useState<ClientModel[]>([]);
+    const clients = useSelector((state: RootState) => state.data.clients) ?? [];
     const [clientName, setClientName] = useState(project?.clientName ?? "");
     const [members, setMembers] = useState<Record<MemberRole, number[]>>({
         manager: project?.members.filter(m => m.memberRole === MemberRole.Manager).map(m => m.idUser) ?? (me && canEdit && !project ? [me.idUser] : []),
@@ -73,7 +72,7 @@ export function ProjectForm({ project, kind, onSaved }: ProjectFormProps) {
 
     useEffect(() => {
         if (!canEdit) return;
-        clientService.getAllClients().then(setClients).catch(() => undefined);
+        clientService.getAllClients().catch(() => undefined);
     }, [canEdit]);
 
 

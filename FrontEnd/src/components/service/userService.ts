@@ -16,30 +16,35 @@ class UserService {
         return response.data;
     }
 
+    //Team + projects (member names) after a change
+    public async afterChange(): Promise<void> {
+        await Promise.all([this.getAllUsers(), projectService.refresh()]);
+    }
+
     //Add User
     public async addUser(user: UserDto): Promise<UserModel> {
         const response = await axios.post<UserModel>(appConfig.usersUrl, user);
-        await this.getAllUsers();
+        await this.afterChange();
         return response.data;
     }
 
     //Update User
     public async updateUser(id: number, user: UserDto): Promise<UserModel> {
         const response = await axios.put<UserModel>(appConfig.usersUrl + id, user);
-        await this.getAllUsers();
+        await this.afterChange();
         return response.data;
     }
 
     //Projects the user may enter and work in (replaces the list)
     public async updateUserProjects(id: number, projects: UserProjectDto[]): Promise<void> {
         await axios.put(appConfig.usersUrl + id + "/projects", { projects });
-        await projectService.getAllProjects();
+        await this.afterChange();
     }
 
     //Delete User
     public async deleteUser(id: number): Promise<void> {
         await axios.delete(appConfig.usersUrl + id);
-        await this.getAllUsers();
+        await this.afterChange();
     }
 
 }

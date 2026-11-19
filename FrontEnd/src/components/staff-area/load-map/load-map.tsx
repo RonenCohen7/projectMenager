@@ -11,6 +11,7 @@ import { useTitle } from "../../utils/UseTitle";
 import { assignments, autoLevelName, cellBand, fullName, isInactive, jobUsage, percentOf, sumLoad, totalBand, totalBands } from "../../utils/utils";
 import { projectService } from "../../service/projectService";
 import { settingsService } from "../../service/settingsService";
+import { defaultHeat } from "../../redux/data-slice";
 import { notificationService } from "../../service/notificationService";
 import { ClientChip, StatusPill } from "../../shared-area/tags/tags";
 
@@ -23,12 +24,15 @@ export function LoadMap() {
     const users = useSelector((state: RootState) => state.data.users);
     const projects = useSelector((state: RootState) => state.data.projects);
 
-    const [heat, setHeat] = useState<HeatSettingsModel>({ weekHours: 42, levels: { low: 10, medium: 25, high: 40 } });
+    //Saved settings come from the store (live); while editing - a local draft
+    const storedHeat = useSelector((state: RootState) => state.data.heat) ?? defaultHeat;
+    const [draft, setHeat] = useState<HeatSettingsModel | null>(null);
+    const heat = draft ?? storedHeat;
     const [showSettings, setShowSettings] = useState(false);
     const [openUser, setOpenUser] = useState<UserModel | null>(null);
 
     useEffect(() => {
-        settingsService.getHeat().then(setHeat).catch(err => notificationService.error(err));
+        settingsService.getHeat().catch(err => notificationService.error(err));
     }, []);
 
 
@@ -50,7 +54,8 @@ export function LoadMap() {
 
     async function saveSettings() {
         try {
-            setHeat(await settingsService.updateHeat(heat));
+            await settingsService.updateHeat(heat);
+            setHeat(null);
             setShowSettings(false);
             notificationService.success("ההגדרות נשמרו");
         } catch (err) {
@@ -76,7 +81,7 @@ export function LoadMap() {
                     <h1>מפת עומסים</h1>
                     <p>כל שורה היא איש צוות וכל עמודה היא לקוח. לחיצה על שם פותחת את הפרויקטים שלו, ושם קובעים את רמת העומס בכל פרויקט.</p>
                 </div>
-                <Button variant="outlined" startIcon={<TuneIcon />} onClick={() => setShowSettings(!showSettings)}>הגדרות חישוב</Button>
+                <Button variant="outlined" startIcon={<TuneIcon />} onClick={() => { setShowSettings(!showSettings); setHeat(null); }}>הגדרות חישוב</Button>
             </header>
 
             {showSettings && (

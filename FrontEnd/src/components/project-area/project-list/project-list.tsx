@@ -7,7 +7,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import type { RootState } from "../../redux/store";
 import type { ProjectModel } from "../../models/project-model";
 import type { TaskModel } from "../../models/task-model";
-import type { HeatSettingsModel } from "../../models/settings-model";
 import { InvoiceStatus, leadStatuses, MemberRole, priorityRank, ProjectStatus, statusLabel, statusStyle, urgencyRank } from "../../models/enum";
 import { useTitle } from "../../utils/UseTitle";
 import { useProjectDrawer } from "../../utils/UseProjectDrawer";
@@ -69,7 +68,7 @@ export function ProjectList({ tab }: { tab: ProjectTab }) {
     const [sort, setSort] = useState<SortKey>(tab === "active" ? "attention" : "last");
     const [statusFilter, setStatusFilter] = useState<string | null>(null);
     const [view, setView] = useState<ViewMode>(() => (localStorage.getItem("projectsView") as ViewMode) || "list");
-    const [heat, setHeat] = useState<HeatSettingsModel | null>(null);
+    const heat = useSelector((state: RootState) => state.data.heat);
 
     const privileged = isPrivileged(me?.role);
     const clientFilter = searchParams.get("client") || "";
@@ -77,7 +76,7 @@ export function ProjectList({ tab }: { tab: ProjectTab }) {
 
     //Load map settings (team load in the rail)
     useEffect(() => {
-        if (tab === "active" && privileged) settingsService.getHeat().then(setHeat).catch(() => undefined);
+        if (tab === "active" && privileged) settingsService.getHeat().catch(() => undefined);
     }, [tab, privileged]);
 
     function changeView(mode: ViewMode) {

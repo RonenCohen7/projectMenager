@@ -27,8 +27,8 @@ export function ProjectDrawer() {
 
     const { idProject, newKind, closeProject, openProject } = useProjectDrawer();
 
-    const projects = useSelector((state: RootState) => state.data.projects);
     const tasks = useSelector((state: RootState) => state.data.tasks);
+    const version = useSelector((state: RootState) => state.data.version);
 
     const [project, setProject] = useState<ProjectDetailsModel | null>(null);
     const [tab, setTab] = useState<DrawerTab>("log");
@@ -37,7 +37,7 @@ export function ProjectDrawer() {
 
 
     // =========================
-    // Load details (again when the lists change after a save)
+    // Load details (again on every change of projects / tasks - own save or live from another user)
     // =========================
 
     const reload = useCallback(async () => {
@@ -57,7 +57,7 @@ export function ProjectDrawer() {
 
     useEffect(() => {
         reload();
-    }, [reload, projects, tasks]);
+    }, [reload, version]);
 
 
     const isLead = newKind ? newKind === "lead" : project?.kind === ProjectKind.Lead;

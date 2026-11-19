@@ -7,7 +7,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import type { RootState } from "../../redux/store";
 import type { HiringDto, HiringModel } from "../../models/hiring-model";
-import type { HeatSettingsModel } from "../../models/settings-model";
+import { defaultHeat } from "../../redux/data-slice";
 import { HiringStatus, hiringStatusLabel, memberRoleLabel } from "../../models/enum";
 import { useTitle } from "../../utils/UseTitle";
 import { useProjectDrawer } from "../../utils/UseProjectDrawer";
@@ -30,14 +30,14 @@ export function StaffList() {
 
     const { openProject } = useProjectDrawer();
 
-    const [hiring, setHiring] = useState<HiringModel[]>([]);
-    const [heat, setHeat] = useState<HeatSettingsModel>({ weekHours: 42, levels: { low: 10, medium: 25, high: 40 } });
+    const hiring = useSelector((state: RootState) => state.data.hiring) ?? [];
+    const heat = useSelector((state: RootState) => state.data.heat) ?? defaultHeat;
     const [editing, setEditing] = useState<HiringModel | "new" | null>(null);
 
 
     async function loadHiring() {
         try {
-            setHiring(await hiringService.getAll());
+            await hiringService.getAll();
         } catch (err) {
             notificationService.error(err);
         }
@@ -45,7 +45,7 @@ export function StaffList() {
 
     useEffect(() => {
         loadHiring();
-        settingsService.getHeat().then(setHeat).catch(() => undefined);
+        settingsService.getHeat().catch(() => undefined);
     }, []);
 
 
@@ -53,7 +53,6 @@ export function StaffList() {
         if (!window.confirm(`למחוק את "${item.roleTitle}"?`)) return;
         try {
             await hiringService.delete(item.idHiring);
-            await loadHiring();
         } catch (err) {
             notificationService.error(err);
         }
@@ -150,7 +149,7 @@ export function StaffList() {
                 </div>
             </section>
 
-            {editing && <HiringDialog item={editing === "new" ? null : editing} onClose={() => setEditing(null)} onSaved={() => { setEditing(null); loadHiring(); }} />}
+            {editing && <HiringDialog item={editing === "new" ? null : editing} onClose={() => setEditing(null)} onSaved={() => setEditing(null)} />}
 
         </section>
     );

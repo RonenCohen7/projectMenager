@@ -16,6 +16,8 @@ import { planController } from "./controllers/plan-controller";
 import { infoController } from "./controllers/info-controller";
 import { hiringController } from "./controllers/hiring-controller";
 import { settingsController } from "./controllers/settings-controller";
+import { liveController } from "./controllers/live-controller";
+import { liveService } from "./services/live-service";
 import { userService } from "./services/users-service";
 
 
@@ -55,8 +57,12 @@ class App {
 
             app.use("/api", apiLimiter);
 
+            //Every successful change is sent to all open browsers (live refresh)
+            app.use(liveService.notifyOnChange);
+
             app.get("/api/health", (request, response) => { response.json({ ok: true }) });
 
+            app.use(liveController.router);
             app.use(authController.router);
             app.use(userController.router);
             app.use(clientController.router);
