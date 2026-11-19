@@ -2,7 +2,7 @@
 -- users.role is already ENUM('admin','manager','employee'), so no schema change.
 -- Re-running sets the same email and role.
 
-UPDATE users SET email = 'meital@T-more.co.il', role = 'manager' WHERE id_user = 1;
+UPDATE users SET email = 'meitala@t-more.co.il', role = 'manager' WHERE id_user = 1;
 UPDATE users SET email = 'neta@T-more.co.il', role = 'employee' WHERE id_user = 2;
 UPDATE users SET email = 'noa@T-more.co.il', role = 'employee' WHERE id_user = 3;
 UPDATE users SET email = 'may@T-more.co.il', role = 'employee' WHERE id_user = 4;
